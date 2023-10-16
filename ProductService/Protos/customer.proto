@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option csharp_namespace = "AuthService";
+
+service GrpcCustomer {
+    rpc GetAllCustomers (GetAllRequest) returns (CustomerResponse);
+    rpc GetAllTaskers (GetAllRequest) returns (TaskerResponse);
+}
+
+message GetAllRequest {}
+
+message GrpcCustomerModel {
+    int32 customerId = 1;
+    string name = 2;
+    string email = 3;
+    string address = 4;
+    bool status =5;
+}
+
+message GrpcTaskerModel {
+    int32 taskerId = 1;
+    string name = 2;
+    string email = 3;
+    string address = 4;
+    string identification =5;
+    bool status =6;
+}
+
+message CustomerResponse {
+    repeated GrpcCustomerModel customer = 1;
+}
+
+message TaskerResponse {
+    repeated GrpcTaskerModel tasker = 1;
+}
+
