@@ -7,8 +7,6 @@ namespace ProductService.Models
     public class OrderCreateModel
     {
         [Required]
-        public int Id { get; set; }
-        [Required]
         public DateTime CreatedAt { get; set; }
         [Required]
         public DateTime WorkingAt { get; set; }

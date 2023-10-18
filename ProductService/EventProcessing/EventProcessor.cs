@@ -63,10 +63,11 @@ namespace ProductService.EventProcessing
             {
                 var repo = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
                 var customer = JsonSerializer.Deserialize<CustomerPublishedModel>(customerMessage);
-
+                Console.WriteLine("Customer:" + customer.Id);
                 try
                 {
                     var customerEntity = _mapper.Map<Customer>(customer);
+                    Console.WriteLine("CustomerEntity:" + customerEntity.Id);
                     if (!repo.ExternalCustomerExists(customerEntity.ExternalId))
                     {
                         repo.CreateCustomer(customerEntity);
