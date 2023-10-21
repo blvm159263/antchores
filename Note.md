@@ -1,14 +1,14 @@
 **Build AuthService**
-`docker build -t [username-docker]/authservice .`
+`docker build -t [username-docker]/authservice -f AuthService.API/Dockerfile .`
 
 **Push AuthService**
 `docker push [username-docker]/authservice`
 
 **Build ProductService**
-`docker build -t [username-docker]/productservice .`
+`docker build -t [username-docker]/productservice`
 
 **Push ProductService**
-`docker push [username-docker]/productservice`
+`docker push [username-docker]/productservice -f ProductService.API/Dockerfile`
 
 **Run Kubernate**
 `kubectl apply -f rabbitmq-depl.yaml`
