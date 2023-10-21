@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthService", "AuthService", "{B6A1EFA6-8CB8-4396-89D8-3D24823CB4D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService.BusinessObjects", "AuthService.BusinessObjects\AuthService.BusinessObjects.csproj", "{A0EC4CC2-2665-4D24-A4B0-09E0D7E42BF3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService.API", "AuthService.API\AuthService.API.csproj", "{2F91FBC8-3DB5-463C-BEC5-5D96DE438A48}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProductSevice", "ProductSevice", "{20174C96-4B29-4F6B-B96D-A6CC3324207E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "K8S", "K8S", "{D4719588-48E6-44AC-9A50-1A734668E7F1}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\auths-depl.yaml = ..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\auths-depl.yaml
+		..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\auths-np-srv.yaml = ..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\auths-np-srv.yaml
+		..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\ingress-srv.yaml = ..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\ingress-srv.yaml
+		..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\local-pvc.yaml = ..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\local-pvc.yaml
+		..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\mssql-plat-depl.yaml = ..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\mssql-plat-depl.yaml
+		..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\products-depl.yaml = ..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\products-depl.yaml
+		..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\rabbitmq-depl.yaml = ..\..\..\..\..\VMinh\Studying\FPT_Studying\Fall23\PRN231\antchores\K8S\rabbitmq-depl.yaml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.BusinessObjects", "ProductService.BusinessObjects\ProductService.BusinessObjects.csproj", "{03060679-DC81-4F32-AE96-F215E60D21B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Services", "ProductService.Services\ProductService.Services.csproj", "{5614499E-2FF6-4744-BD9D-AEBD97ED3E5E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.API", "ProductService.API\ProductService.API.csproj", "{F6DA11D8-AC01-4AC4-91CD-C5F636E3B271}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthService.DataAccess", "AuthService.DataAccess\AuthService.DataAccess.csproj", "{CD4C41BB-A5A5-4035-9D16-D26E0F1BEB2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0EC4CC2-2665-4D24-A4B0-09E0D7E42BF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0EC4CC2-2665-4D24-A4B0-09E0D7E42BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0EC4CC2-2665-4D24-A4B0-09E0D7E42BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0EC4CC2-2665-4D24-A4B0-09E0D7E42BF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F91FBC8-3DB5-463C-BEC5-5D96DE438A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F91FBC8-3DB5-463C-BEC5-5D96DE438A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F91FBC8-3DB5-463C-BEC5-5D96DE438A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F91FBC8-3DB5-463C-BEC5-5D96DE438A48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03060679-DC81-4F32-AE96-F215E60D21B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03060679-DC81-4F32-AE96-F215E60D21B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03060679-DC81-4F32-AE96-F215E60D21B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03060679-DC81-4F32-AE96-F215E60D21B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5614499E-2FF6-4744-BD9D-AEBD97ED3E5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5614499E-2FF6-4744-BD9D-AEBD97ED3E5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5614499E-2FF6-4744-BD9D-AEBD97ED3E5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5614499E-2FF6-4744-BD9D-AEBD97ED3E5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6DA11D8-AC01-4AC4-91CD-C5F636E3B271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6DA11D8-AC01-4AC4-91CD-C5F636E3B271}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6DA11D8-AC01-4AC4-91CD-C5F636E3B271}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6DA11D8-AC01-4AC4-91CD-C5F636E3B271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD4C41BB-A5A5-4035-9D16-D26E0F1BEB2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD4C41BB-A5A5-4035-9D16-D26E0F1BEB2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD4C41BB-A5A5-4035-9D16-D26E0F1BEB2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD4C41BB-A5A5-4035-9D16-D26E0F1BEB2B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A0EC4CC2-2665-4D24-A4B0-09E0D7E42BF3} = {B6A1EFA6-8CB8-4396-89D8-3D24823CB4D1}
+		{2F91FBC8-3DB5-463C-BEC5-5D96DE438A48} = {B6A1EFA6-8CB8-4396-89D8-3D24823CB4D1}
+		{03060679-DC81-4F32-AE96-F215E60D21B8} = {20174C96-4B29-4F6B-B96D-A6CC3324207E}
+		{5614499E-2FF6-4744-BD9D-AEBD97ED3E5E} = {20174C96-4B29-4F6B-B96D-A6CC3324207E}
+		{F6DA11D8-AC01-4AC4-91CD-C5F636E3B271} = {20174C96-4B29-4F6B-B96D-A6CC3324207E}
+		{CD4C41BB-A5A5-4035-9D16-D26E0F1BEB2B} = {B6A1EFA6-8CB8-4396-89D8-3D24823CB4D1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18123A0F-8887-44B0-8F5E-1CA74B400940}
+	EndGlobalSection
+EndGlobal
