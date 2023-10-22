@@ -1,12 +1,14 @@
+﻿using AuthService.Repositories.Data;
+using AuthService.Repositories.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AuthService.Repositories.Data;
-using AuthService.Repositories.Entities;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace AuthService.Repositories.Repositories.Impl
+namespace AuthService.Repositories.Repositories
 {
-    public class TaskerRepository : ITaskerRepository
+    public class TaskerRepository
     {
         private readonly AppDbContext _context;
 
@@ -22,7 +24,7 @@ namespace AuthService.Repositories.Repositories.Impl
 
         public void CreateTasker(Tasker tasker)
         {
-            if(tasker == null)
+            if (tasker == null)
                 throw new ArgumentNullException(nameof(tasker));
 
             _context.Taskers.Add(tasker);

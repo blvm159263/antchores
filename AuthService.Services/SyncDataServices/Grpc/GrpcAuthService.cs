@@ -7,10 +7,10 @@ namespace AuthService.Services.SyncDataServices.Grpc
 {
     public class GrpcAuthService : GrpcCustomer.GrpcCustomerBase
     {
-        private readonly ICustomerRepository _repository;
+        private readonly CustomerRepository _repository;
         private readonly IMapper _mapper;
 
-        public GrpcAuthService(ICustomerRepository repository, IMapper mapper)
+        public GrpcAuthService(CustomerRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

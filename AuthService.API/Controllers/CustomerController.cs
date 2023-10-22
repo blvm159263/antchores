@@ -8,9 +8,8 @@ using AuthService.Repositories.Entities;
 using AuthService.Repositories.Models;
 using AuthService.Repositories.Repositories;
 using AuthService.Services.SyncDataServices.Http;
-using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
 using AuthService.Services.CacheService;
+using AuthService.Services.Services;
 
 namespace AuthService.API.Controllers
 {
@@ -18,20 +17,20 @@ namespace AuthService.API.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly ICustomerService _customerService;
         private readonly IMapper _mapper;
         private readonly IAuthDataClient _authDataClient;
         private readonly IMessageBusClient _messageBusClient;
         private ICacheService _cacheService;
 
         public CustomerController(
-                ICustomerRepository customerRepository,
+                ICustomerService customerService,
                 IMapper mapper,
                 IAuthDataClient authDataClient,
                 IMessageBusClient messageBusClient,
                 ICacheService cacheService)
         {
-            _customerRepository = customerRepository;
+            _customerService = customerService;
             _mapper = mapper;
             _authDataClient = authDataClient;
             _messageBusClient = messageBusClient;
@@ -42,15 +41,15 @@ namespace AuthService.API.Controllers
         public ActionResult<IEnumerable<CustomerReadModel>> GetAllCustomers()
         {
             string key = "allCustomers";
-            var cacheCustomers = _cacheService.GetData<IEnumerable<CustomerReadModel>>(key);
 
+            var cacheCustomers = _cacheService.GetData<IEnumerable<CustomerReadModel>>(key);
 
             if (cacheCustomers == null)
             {
-                var customers = _customerRepository.GetAll();
-                cacheCustomers = _mapper.Map<IEnumerable<CustomerReadModel>>(customers);
+                var customers = _customerService.GetAllCustomers();
 
-                _cacheService.SetData<IEnumerable<CustomerReadModel>>(key, cacheCustomers);
+                _cacheService.SetData<IEnumerable<CustomerReadModel>>(key, customers);
+                
                 return Ok(cacheCustomers);
             }
             
@@ -59,7 +58,7 @@ namespace AuthService.API.Controllers
 
 
         [HttpGet("{id}", Name = "GetCustomerById")]
-        public ActionResult<IEnumerable<CustomerReadModel>> GetCustomerById(int id)
+        public ActionResult<CustomerReadModel> GetCustomerById(int id)
         {
             string key = $"customer-{id}";
 
@@ -67,10 +66,10 @@ namespace AuthService.API.Controllers
 
             if(cacheCustomer == null)
             {
-                var customer = _customerRepository.GetCustomerById(id);
-                cacheCustomer = _mapper.Map<CustomerReadModel>(customer);
+                var customer = _customerService.GetCustomerById(id);
 
-                _cacheService.SetData(key, cacheCustomer);
+                _cacheService.SetData(key, customer);
+
                 return Ok(cacheCustomer);
             }
 
@@ -81,15 +80,15 @@ namespace AuthService.API.Controllers
         public async Task<ActionResult<CustomerReadModel>> CreateCustomer(int accountId, CustomerCreateModel customerCreateModel)
         {
 
-            if(!_customerRepository.AccountExists(accountId))
+            if(!_customerService.AccountExists(accountId))
                 return NotFound();
                 
 
-            var cusModel = _mapper.Map<Customer>(customerCreateModel);
+            /*var cusModel = _mapper.Map<Customer>(customerCreateModel);
             cusModel.AccountId = accountId;
-            _customerRepository.CreateCustomer(cusModel);
+            _customerRepository.CreateCustomer(cusModel);*/
 
-            var cusRead = _mapper.Map<CustomerReadModel>(cusModel);
+            var cusRead = _customerService.CreateCustomer(accountId, customerCreateModel);
 
             //Send Sync Message
             try

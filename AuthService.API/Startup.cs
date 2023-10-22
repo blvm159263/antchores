@@ -1,26 +1,25 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using AuthService.Services.AsyncDataServices;
 using AuthService.Repositories.Data;
 using AuthService.Repositories.Repositories;
-using AuthService.Repositories.Repositories.Impl;
 using AuthService.Services.SyncDataServices.Grpc;
 using AuthService.Services.SyncDataServices.Http;
 using AuthService.API.Data;
 using AuthService.Services.CacheService;
+using AuthService.Repositories.Models;
+using AuthService.Services.Services;
+using AuthService.Services.Services.Impl;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace AuthService.API
 {
@@ -51,17 +50,16 @@ namespace AuthService.API
                 services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
             }
 
-            services.AddStackExchangeRedisCache(opt =>
-            {
-                string connection = Configuration.GetConnectionString("Redis");
-                opt.Configuration = connection;
-            });
+            services.Configure<JwtOptionsModel>(Configuration.GetSection("ApiSettings:JwtOptions"));
 
-
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<ITaskerRepository, TaskerRepository>();
-            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ITaskerService, TaskerService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ICacheService, CacheService>();
+
+            services.AddScoped<CustomerRepository>();
+            services.AddScoped<TaskerRepository>();
+            services.AddScoped<AccountRepository>();
 
             services.AddHttpClient<IAuthDataClient, HttpAuthDataClient>();
             services.AddSingleton<IMessageBusClient, MessageBusClient>();
@@ -74,6 +72,54 @@ namespace AuthService.API
             });
 
             Console.WriteLine($"ProductService Enpoint {Configuration["ProductService"]}");
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "eBookStore.API", Version = "v1" });
+
+                c.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Enter 'Bearer' [space] and then your token",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = "JWT"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = JwtBearerDefaults.AuthenticationScheme
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["ApiSettings:JwtOptions:Issuer"],
+                        ValidAudience = Configuration["ApiSettings:JwtOptions:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["ApiSettings:JwtOptions:SecretKey"]))
+                    };
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,6 +135,8 @@ namespace AuthService.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
