@@ -5,10 +5,10 @@
 `docker push [username-docker]/authservice`
 
 **Build ProductService**
-`docker build -t [username-docker]/productservice`
+`docker build -t [username-docker]/productservice -f ProductService.API/Dockerfile .`
 
 **Push ProductService**
-`docker push [username-docker]/productservice -f ProductService.API/Dockerfile`
+`docker push [username-docker]/productservice`
 
 **Run Kubernate**
 `kubectl apply -f rabbitmq-depl.yaml`

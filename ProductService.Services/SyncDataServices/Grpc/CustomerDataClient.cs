@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using ProductService.BusinessObjects.Entities;
+using ProductService.Repositories.Entities;
 using AutoMapper;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;

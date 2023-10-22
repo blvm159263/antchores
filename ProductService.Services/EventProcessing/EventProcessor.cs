@@ -1,8 +1,8 @@
 using System;
 using System.Text.Json;
-using ProductService.BusinessObjects.Entities;
-using ProductService.BusinessObjects.Models;
-using ProductService.BusinessObjects.Repositories;
+using ProductService.Repositories.Entities;
+using ProductService.Repositories.Models;
+using ProductService.Repositories.Repositories;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 

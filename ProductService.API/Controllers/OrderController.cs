@@ -1,8 +1,8 @@
-using ProductService.BusinessObjects.Entities;
-using ProductService.BusinessObjects.Models;
-using ProductService.BusinessObjects.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ProductService.Repositories.Models;
+using ProductService.Repositories.Repositories;
+using ProductService.Repositories.Entities;
 using System;
 using System.Collections.Generic;
 
@@ -59,7 +59,8 @@ namespace ProductService.API.Controllers
             _orderRepository.CreateOrder(customerId, Order);
 
             var OrderReadModel = _mapper.Map<OrderReadModel>(Order);
-            return CreatedAtRoute(nameof(GetOrderForCustomer), new {customerId = customerId, orderId = OrderReadModel.Id}, OrderReadModel);
+            return CreatedAtRoute(nameof(
+                GetOrderForCustomer), new {customerId = customerId, orderId = OrderReadModel.Id}, OrderReadModel);
         }
     }
 }

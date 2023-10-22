@@ -1,7 +1,7 @@
-using ProductService.BusinessObjects.Models;
-using ProductService.BusinessObjects.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ProductService.Repositories.Models;
+using ProductService.Repositories.Repositories;
 using System;
 using System.Collections;
 using System.Collections.Generic;

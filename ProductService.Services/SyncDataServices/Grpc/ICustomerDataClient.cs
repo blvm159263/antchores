@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ProductService.BusinessObjects.Entities;
+using ProductService.Repositories.Entities;
 
 namespace ProductService.Services.SyncDataServices.Grpc
 {

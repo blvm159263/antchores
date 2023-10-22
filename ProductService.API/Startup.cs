@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ProductService.Services.AsyncDataServices;
-using ProductService.BusinessObjects.Data;
-using ProductService.Services.EventProcessing;
-using ProductService.BusinessObjects.Repositories;
-using ProductService.BusinessObjects.Repositories.Impl;
 using ProductService.Services.SyncDataServices.Grpc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +15,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using ProductService.API.Data;
+using ProductService.Repositories.Data;
+using ProductService.Repositories.Repositories;
+using ProductService.Repositories.Repositories.Impl;
+using ProductService.Services.EventProcessing;
 
 namespace ProductService
 {

@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using ProductService.BusinessObjects.Entities;
-using ProductService.BusinessObjects.Repositories;
+using ProductService.Repositories.Entities;
+using ProductService.Repositories.Repositories;
 using ProductService.Services.SyncDataServices.Grpc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using ProductService.BusinessObjects.Data;
+using ProductService.Repositories.Data;
 
 namespace ProductService.API.Data
 {
