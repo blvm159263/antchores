@@ -8,6 +8,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
+using System;
+using AuthService.Services.CacheService;
 
 namespace AuthService.API.Controllers
 {
@@ -17,56 +19,53 @@ namespace AuthService.API.Controllers
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
-        private IDistributedCache _distributedCache;
+        private ICacheService _cacheService;
 
-        public AccountController(IAccountRepository accountRepository, IMapper mapper, IDistributedCache distributedCache)
+
+        public AccountController(IAccountRepository accountRepository, IMapper mapper, ICacheService cacheService)
         {
             _accountRepository = accountRepository;
             _mapper = mapper;
-            _distributedCache = distributedCache;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<AccountReadModel>> GetAllAccounts()
         {
-            string? cacheAccounts = _distributedCache.GetString("allAccount");
+            string key = "allAccounts";
+            var cacheAccounts = _cacheService.GetData<IEnumerable<AccountReadModel>>("allAccounts");
 
-            IEnumerable<AccountReadModel>? accountReads;
-
-            if(string.IsNullOrEmpty(cacheAccounts))
+            if(cacheAccounts == null)
             {
                 var accounts = _accountRepository.GetAllAccounts();
 
-                accountReads = _mapper.Map<IEnumerable<AccountReadModel>>(accounts);
-                _distributedCache.SetString("allAccount", JsonSerializer.Serialize(accountReads));
+                cacheAccounts = _mapper.Map<IEnumerable<AccountReadModel>>(accounts);
 
-                return Ok(accountReads);
+                _cacheService.SetData(key, cacheAccounts);
+
+                return Ok(cacheAccounts);
             }
 
-            accountReads = JsonSerializer.Deserialize<IEnumerable<AccountReadModel>>(cacheAccounts);
-
-            return Ok(accountReads);
+            return Ok(cacheAccounts);
         }
 
         [HttpGet("{id}", Name = "GetAccountById")]
         public ActionResult<AccountReadModel> GetAccountById(int id)
         {
             string key = $"account-{id}";
-            string? cacheAccount = _distributedCache.GetString(key);
+            var cacheAccount = _cacheService.GetData<AccountReadModel>(key);
 
-            AccountReadModel? accountReadModel;
 
-            if(string.IsNullOrEmpty(cacheAccount))
+            if(cacheAccount == null)
             {
                 var account = _accountRepository.GetAccountById(id);
-                accountReadModel = _mapper.Map<AccountReadModel>(account);
+                cacheAccount = _mapper.Map<AccountReadModel>(account);
 
-                _distributedCache.SetString(key, JsonSerializer.Serialize(accountReadModel));
-                return Ok(accountReadModel);
+                _cacheService.SetData<AccountReadModel>(key, cacheAccount);
+                return Ok(cacheAccount);
             }
 
-            accountReadModel = JsonSerializer.Deserialize<AccountReadModel>(cacheAccount);
-            return Ok(accountReadModel);
+            return Ok(cacheAccount);
         }
 
         [HttpPost]

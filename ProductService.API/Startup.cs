@@ -19,6 +19,8 @@ using ProductService.Repositories.Data;
 using ProductService.Repositories.Repositories;
 using ProductService.Repositories.Repositories.Impl;
 using ProductService.Services.EventProcessing;
+using AuthService.Services.CacheService;
+using ProductService.Services.CacheService;
 
 namespace ProductService
 {
@@ -56,6 +58,7 @@ namespace ProductService
             });
 
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ICacheService, CacheService>();
 
             services.AddControllers();
 

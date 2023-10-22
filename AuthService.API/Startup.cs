@@ -20,6 +20,7 @@ using AuthService.Repositories.Repositories.Impl;
 using AuthService.Services.SyncDataServices.Grpc;
 using AuthService.Services.SyncDataServices.Http;
 using AuthService.API.Data;
+using AuthService.Services.CacheService;
 
 namespace AuthService.API
 {
@@ -60,6 +61,7 @@ namespace AuthService.API
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ITaskerRepository, TaskerRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ICacheService, CacheService>();
 
             services.AddHttpClient<IAuthDataClient, HttpAuthDataClient>();
             services.AddSingleton<IMessageBusClient, MessageBusClient>();

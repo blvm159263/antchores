@@ -10,6 +10,7 @@ using AuthService.Repositories.Repositories;
 using AuthService.Services.SyncDataServices.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
+using AuthService.Services.CacheService;
 
 namespace AuthService.API.Controllers
 {
@@ -21,42 +22,43 @@ namespace AuthService.API.Controllers
         private readonly IMapper _mapper;
         private readonly IAuthDataClient _authDataClient;
         private readonly IMessageBusClient _messageBusClient;
-        private IDistributedCache _distributedCache;
+        private ICacheService _cacheService;
 
         public TaskerController(
                 ITaskerRepository TaskerRepository,
                 IMapper mapper,
                 IAuthDataClient authDataClient,
                 IMessageBusClient messageBusClient,
-                IDistributedCache distributedCache)
+                ICacheService cacheService)
         {
             _taskerRepository = TaskerRepository;
             _mapper = mapper;
             _authDataClient = authDataClient;
             _messageBusClient = messageBusClient;
-            _distributedCache = distributedCache;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<TaskerReadModel>> GetAllTaskers()
         {
-            string? cacheTaskers = _distributedCache.GetString("allTaskers");
-            IEnumerable<TaskerReadModel>? taskerReadModels;
 
-            if (string.IsNullOrEmpty(cacheTaskers))
+            string key = "allTaskers";
+            var cacheTaskers = _cacheService.GetData<IEnumerable<TaskerReadModel>>(key);
+
+
+            if (cacheTaskers == null)
             {
                 var taskers = _taskerRepository.GetAll();
 
-                taskerReadModels = _mapper.Map<IEnumerable<TaskerReadModel>>(taskers);
+                cacheTaskers = _mapper.Map<IEnumerable<TaskerReadModel>>(taskers);
 
-                _distributedCache.SetString("allTaskers", JsonSerializer.Serialize(taskerReadModels));
+                _cacheService.SetData(key, cacheTaskers);
 
-                return Ok(taskerReadModels);
+                return Ok(cacheTaskers);
 
             }
 
-            taskerReadModels = JsonSerializer.Deserialize<IEnumerable<TaskerReadModel>>(cacheTaskers);
-            return Ok(taskerReadModels);
+            return Ok(cacheTaskers);
         }
 
 
@@ -64,21 +66,19 @@ namespace AuthService.API.Controllers
         public ActionResult<IEnumerable<TaskerReadModel>> GetTaskerById(int id)
         {
             string key = $"tasker-{id}";
-            string? cacheTasker = _distributedCache.GetString(key);
+            var cacheTasker = _cacheService.GetData<TaskerReadModel>(key);
 
-            TaskerReadModel? taskerReadModel;
-            if (string.IsNullOrEmpty(cacheTasker))
+            if (cacheTasker == null)
             {
                 var tasker = _taskerRepository.GetTaskerById(id);
-                taskerReadModel = _mapper.Map<TaskerReadModel>(tasker);
+                cacheTasker = _mapper.Map<TaskerReadModel>(tasker);
 
-                _distributedCache.SetString(key, JsonSerializer.Serialize(taskerReadModel));
+                _cacheService.SetData(key , cacheTasker);
 
-                return Ok(taskerReadModel);
+                return Ok(cacheTasker);
             }
 
-            taskerReadModel = JsonSerializer.Deserialize<TaskerReadModel>(cacheTasker);
-            return Ok(taskerReadModel);
+            return Ok(cacheTasker);
         }
 
         [HttpPost("accounts/{accountId}")]

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using ProductService.Repositories.Models;
 using ProductService.Repositories.Repositories;
+using ProductService.Services.CacheService;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,35 +17,31 @@ namespace ProductService.API.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
-        private IDistributedCache _distributedCache;
+        private ICacheService _cacheService;
 
-        public CustomerController(IOrderRepository orderRepository, IMapper mapper, IDistributedCache distributedCache)
+        public CustomerController(IOrderRepository orderRepository, IMapper mapper, ICacheService cacheService)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
-            _distributedCache = distributedCache;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<CustomerReadModel>> GetCustomers(){
             Console.WriteLine("Get Customers from product service...");
+            string key = "allCustomersProduct";
+            var cacheCustomers = _cacheService.GetData<IEnumerable<CustomerReadModel>>(key);
 
-            string? cacheCustomers = _distributedCache.GetString("allCustomers");
-
-            IEnumerable<CustomerReadModel>? customerReadModels;
-
-            if (string.IsNullOrEmpty(cacheCustomers))
+            if (cacheCustomers == null)
             {
                 var customerItems = _orderRepository.GetAllCustomers();
-                customerReadModels = _mapper.Map<IEnumerable<CustomerReadModel>>(customerItems);
+                cacheCustomers = _mapper.Map<IEnumerable<CustomerReadModel>>(customerItems);
 
-                _distributedCache.SetString("allCustomers", JsonSerializer.Serialize(customerReadModels));
-                return Ok(customerReadModels);
+                _cacheService.SetData(key, cacheCustomers);
+                return Ok(cacheCustomers);
             }
 
-            customerReadModels = JsonSerializer.Deserialize<IEnumerable<CustomerReadModel>>(cacheCustomers);
-
-            return Ok(customerReadModels);
+            return Ok(cacheCustomers);
         }
 
         [HttpPost]

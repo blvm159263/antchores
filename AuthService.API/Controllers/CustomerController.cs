@@ -10,6 +10,7 @@ using AuthService.Repositories.Repositories;
 using AuthService.Services.SyncDataServices.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
+using AuthService.Services.CacheService;
 
 namespace AuthService.API.Controllers
 {
@@ -21,41 +22,39 @@ namespace AuthService.API.Controllers
         private readonly IMapper _mapper;
         private readonly IAuthDataClient _authDataClient;
         private readonly IMessageBusClient _messageBusClient;
-        private IDistributedCache _distributedCache;
+        private ICacheService _cacheService;
 
         public CustomerController(
                 ICustomerRepository customerRepository,
                 IMapper mapper,
                 IAuthDataClient authDataClient,
                 IMessageBusClient messageBusClient,
-                IDistributedCache distributedCache)
+                ICacheService cacheService)
         {
             _customerRepository = customerRepository;
             _mapper = mapper;
             _authDataClient = authDataClient;
             _messageBusClient = messageBusClient;
-            _distributedCache = distributedCache;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<CustomerReadModel>> GetAllCustomers()
         {
-            string? cacheCustomers = _distributedCache.GetString("allCustomers");
+            string key = "allCustomers";
+            var cacheCustomers = _cacheService.GetData<IEnumerable<CustomerReadModel>>(key);
 
-            IEnumerable<CustomerReadModel>? customerReadModels;
 
-            if (string.IsNullOrEmpty(cacheCustomers))
+            if (cacheCustomers == null)
             {
                 var customers = _customerRepository.GetAll();
-                customerReadModels = _mapper.Map<IEnumerable<CustomerReadModel>>(customers);
+                cacheCustomers = _mapper.Map<IEnumerable<CustomerReadModel>>(customers);
 
-                _distributedCache.SetString("allCustomers", JsonSerializer.Serialize(customerReadModels));
-                return Ok(customerReadModels);
+                _cacheService.SetData<IEnumerable<CustomerReadModel>>(key, cacheCustomers);
+                return Ok(cacheCustomers);
             }
-
-            customerReadModels = JsonSerializer.Deserialize<IEnumerable<CustomerReadModel>>(cacheCustomers);
             
-            return Ok(customerReadModels);
+            return Ok(cacheCustomers);
         }
 
 
@@ -64,20 +63,18 @@ namespace AuthService.API.Controllers
         {
             string key = $"customer-{id}";
 
-            string? cacheCustomer = _distributedCache.GetString(key);
+            var cacheCustomer = _cacheService.GetData<CustomerReadModel>(key);
 
-            CustomerReadModel? customerReadModel;
-            if(string.IsNullOrEmpty(cacheCustomer))
+            if(cacheCustomer == null)
             {
                 var customer = _customerRepository.GetCustomerById(id);
-                customerReadModel = _mapper.Map<CustomerReadModel>(customer);
+                cacheCustomer = _mapper.Map<CustomerReadModel>(customer);
 
-                _distributedCache.SetString(key , JsonSerializer.Serialize(customerReadModel));
-                return Ok(customerReadModel);
+                _cacheService.SetData(key, cacheCustomer);
+                return Ok(cacheCustomer);
             }
 
-            customerReadModel = JsonSerializer.Deserialize<CustomerReadModel>(cacheCustomer);
-            return Ok(customerReadModel);
+            return Ok(cacheCustomer);
         }
 
         [HttpPost("accounts/{accountId}")]
