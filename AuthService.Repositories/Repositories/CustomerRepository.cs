@@ -1,12 +1,14 @@
+﻿using AuthService.Repositories.Data;
+using AuthService.Repositories.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AuthService.Repositories.Data;
-using AuthService.Repositories.Entities;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace AuthService.Repositories.Repositories.Impl
+namespace AuthService.Repositories.Repositories
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerRepository
     {
         private readonly AppDbContext _context;
 
@@ -22,7 +24,7 @@ namespace AuthService.Repositories.Repositories.Impl
 
         public void CreateCustomer(Customer customer)
         {
-            if(customer == null)
+            if (customer == null)
                 throw new ArgumentNullException(nameof(customer));
 
             _context.Customers.Add(customer);
@@ -36,7 +38,7 @@ namespace AuthService.Repositories.Repositories.Impl
 
         public Customer GetCustomerById(int id)
         {
-            return _context.Customers.FirstOrDefault(c => c.Id == id);
+            return _context.Customers.SingleOrDefault(c => c.Id == id);
         }
     }
 }

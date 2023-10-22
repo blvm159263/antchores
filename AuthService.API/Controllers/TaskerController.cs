@@ -4,13 +4,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using AuthService.Services.AsyncDataServices;
-using AuthService.Repositories.Entities;
 using AuthService.Repositories.Models;
-using AuthService.Repositories.Repositories;
 using AuthService.Services.SyncDataServices.Http;
-using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
 using AuthService.Services.CacheService;
+using AuthService.Services.Services;
 
 namespace AuthService.API.Controllers
 {
@@ -18,44 +15,40 @@ namespace AuthService.API.Controllers
     [ApiController]
     public class TaskerController : ControllerBase
     {
-        private readonly ITaskerRepository _taskerRepository;
+        private readonly ITaskerService _taskerService;
         private readonly IMapper _mapper;
         private readonly IAuthDataClient _authDataClient;
         private readonly IMessageBusClient _messageBusClient;
         private ICacheService _cacheService;
 
         public TaskerController(
-                ITaskerRepository TaskerRepository,
+                ITaskerService taskerService,
                 IMapper mapper,
                 IAuthDataClient authDataClient,
                 IMessageBusClient messageBusClient,
                 ICacheService cacheService)
         {
-            _taskerRepository = TaskerRepository;
             _mapper = mapper;
             _authDataClient = authDataClient;
             _messageBusClient = messageBusClient;
             _cacheService = cacheService;
+            _taskerService = taskerService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<TaskerReadModel>> GetAllTaskers()
         {
-
             string key = "allTaskers";
+         
             var cacheTaskers = _cacheService.GetData<IEnumerable<TaskerReadModel>>(key);
-
 
             if (cacheTaskers == null)
             {
-                var taskers = _taskerRepository.GetAll();
+                var taskers = _taskerService.GetAllTaskers();
 
-                cacheTaskers = _mapper.Map<IEnumerable<TaskerReadModel>>(taskers);
-
-                _cacheService.SetData(key, cacheTaskers);
+                _cacheService.SetData(key, taskers);
 
                 return Ok(cacheTaskers);
-
             }
 
             return Ok(cacheTaskers);
@@ -66,14 +59,14 @@ namespace AuthService.API.Controllers
         public ActionResult<IEnumerable<TaskerReadModel>> GetTaskerById(int id)
         {
             string key = $"tasker-{id}";
+
             var cacheTasker = _cacheService.GetData<TaskerReadModel>(key);
 
             if (cacheTasker == null)
             {
-                var tasker = _taskerRepository.GetTaskerById(id);
-                cacheTasker = _mapper.Map<TaskerReadModel>(tasker);
+                var tasker = _taskerService.GetTaskerById(id);
 
-                _cacheService.SetData(key , cacheTasker);
+                _cacheService.SetData(key , tasker);
 
                 return Ok(cacheTasker);
             }
@@ -82,18 +75,20 @@ namespace AuthService.API.Controllers
         }
 
         [HttpPost("accounts/{accountId}")]
-        public async Task<ActionResult<TaskerReadModel>> CreateTasker(int accountId, TaskerCreateModel taskerCreateModel)
+        public async Task<ActionResult<TaskerReadModel>> CreateTasker(
+            int accountId, TaskerCreateModel taskerCreateModel)
         {
 
-            if (!_taskerRepository.AccountExists(accountId))
+            if (!_taskerService.AccountExists(accountId))
                 return NotFound();
 
-
-            var cusModel = _mapper.Map<Tasker>(taskerCreateModel);
+            /*var cusModel = _mapper.Map<Tasker>(taskerCreateModel);
             cusModel.AccountId = accountId;
-            _taskerRepository.CreateTasker(cusModel);
+            _taskerRepository.CreateTasker(cusModel);*/
 
-            var cusRead = _mapper.Map<TaskerReadModel>(cusModel);
+            var cusRead = _taskerService.CreateTasker(accountId, taskerCreateModel);
+
+           /* var cusRead = _mapper.Map<TaskerReadModel>(cusModel);*/
 
             // //Send Sync Message
             // try

@@ -24,6 +24,13 @@ spec:
                 name: auths-clusterip-srv
                 port:
                   number: 80
+          - path: /api/taskers
+            pathType: Prefix
+            backend:
+              service:
+                name: auths-clusterip-srv
+                port:
+                  number: 80
           - path: /api/c/customers
             pathType: Prefix
             backend:
