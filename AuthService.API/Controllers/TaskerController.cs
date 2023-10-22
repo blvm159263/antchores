@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using AuthService.DataAccess.AsyncDataServices;
-using AuthService.BusinessObjects.Entities;
-using AuthService.BusinessObjects.Models;
-using AuthService.BusinessObjects.Repositories;
-using AuthService.DataAccess.SyncDataServices.Http;
+using AuthService.Services.AsyncDataServices;
+using AuthService.Repositories.Entities;
+using AuthService.Repositories.Models;
+using AuthService.Repositories.Repositories;
+using AuthService.Services.SyncDataServices.Http;
 
 namespace AuthService.API.Controllers
 {

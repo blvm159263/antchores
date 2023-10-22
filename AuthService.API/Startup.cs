@@ -13,12 +13,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using AuthService.DataAccess.AsyncDataServices;
-using AuthService.BusinessObjects.Data;
-using AuthService.BusinessObjects.Repositories;
-using AuthService.BusinessObjects.Repositories.Impl;
-using AuthService.DataAccess.SyncDataServices.Grpc;
-using AuthService.DataAccess.SyncDataServices.Http;
+using AuthService.Services.AsyncDataServices;
+using AuthService.Repositories.Data;
+using AuthService.Repositories.Repositories;
+using AuthService.Repositories.Repositories.Impl;
+using AuthService.Services.SyncDataServices.Grpc;
+using AuthService.Services.SyncDataServices.Http;
 using AuthService.API.Data;
 
 namespace AuthService.API

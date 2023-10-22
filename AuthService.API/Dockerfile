@@ -7,8 +7,8 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["AuthService.API/AuthService.API.csproj", "AuthService.API/"]
-COPY ["AuthService.DataAccess/AuthService.DataAccess.csproj", "AuthService.DataAccess/"]
-COPY ["AuthService.BusinessObjects/AuthService.BusinessObjects.csproj", "AuthService.BusinessObjects/"]
+COPY ["AuthService.Services/AuthService.Services.csproj", "AuthService.Services/"]
+COPY ["AuthService.Repositories/AuthService.Repositories.csproj", "AuthService.Repositories/"]
 RUN dotnet restore "AuthService.API/AuthService.API.csproj"
 COPY . .
 WORKDIR "/src/AuthService.API"

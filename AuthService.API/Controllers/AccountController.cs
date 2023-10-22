@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AuthService.BusinessObjects.Entities;
-using AuthService.BusinessObjects.Models;
-using AuthService.BusinessObjects.Repositories;
-using AuthService.BusinessObjects.Enums;
+using AuthService.Repositories.Entities;
+using AuthService.Repositories.Models;
+using AuthService.Repositories.Repositories;
+using AuthService.Repositories.Enums;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 

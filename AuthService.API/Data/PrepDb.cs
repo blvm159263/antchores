@@ -3,9 +3,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using AuthService.BusinessObjects.Entities;
-using AuthService.BusinessObjects.Data;
-using AuthService.BusinessObjects.Enums;
+using AuthService.Repositories.Entities;
+using AuthService.Repositories.Data;
+using AuthService.Repositories.Enums;
 
 namespace AuthService.API.Data
 {

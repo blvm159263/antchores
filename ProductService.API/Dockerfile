@@ -7,8 +7,8 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["ProductService.API/ProductService.API.csproj", "ProductService.API/"]
-COPY ["ProductService.BusinessObjects/ProductService.BusinessObjects.csproj", "ProductService.BusinessObjects/"]
 COPY ["ProductService.Services/ProductService.Services.csproj", "ProductService.Services/"]
+COPY ["ProductService.Repositories/ProductService.Repositories.csproj", "ProductService.Repositories/"]
 RUN dotnet restore "ProductService.API/ProductService.API.csproj"
 COPY . .
 WORKDIR "/src/ProductService.API"
