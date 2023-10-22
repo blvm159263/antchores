@@ -49,6 +49,11 @@ namespace ProductService
                 services.AddDbContext<AppDbContext>(opt =>
                      opt.UseInMemoryDatabase("InMem"));
             }
+            services.AddStackExchangeRedisCache(opt =>
+            {
+                string connection = Configuration.GetConnectionString("Redis");
+                opt.Configuration = connection;
+            });
 
             services.AddScoped<IOrderRepository, OrderRepository>();
 

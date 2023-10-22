@@ -50,6 +50,12 @@ namespace AuthService.API
                 services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
             }
 
+            services.AddStackExchangeRedisCache(opt =>
+            {
+                string connection = Configuration.GetConnectionString("Redis");
+                opt.Configuration = connection;
+            });
+
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ITaskerRepository, TaskerRepository>();
