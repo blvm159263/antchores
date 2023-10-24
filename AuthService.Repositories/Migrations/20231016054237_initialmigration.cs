@@ -7,9 +7,9 @@ namespace AuthService.Repositories.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("DROP TABLE IF EXISTS Accounts;");
             migrationBuilder.Sql("DROP TABLE IF EXISTS Customers;");
             migrationBuilder.Sql("DROP TABLE IF EXISTS Taskers;");
+            migrationBuilder.Sql("DROP TABLE IF EXISTS Accounts;");
 
             migrationBuilder.CreateTable(
                 name: "Accounts",

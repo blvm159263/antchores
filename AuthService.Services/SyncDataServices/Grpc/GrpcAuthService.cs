@@ -9,11 +9,13 @@ namespace AuthService.Services.SyncDataServices.Grpc
     {
         private readonly CustomerRepository _repository;
         private readonly IMapper _mapper;
+        private readonly TaskerRepository _taskerRepository;
 
-        public GrpcAuthService(CustomerRepository repository, IMapper mapper)
+        public GrpcAuthService(CustomerRepository repository, TaskerRepository taskerRepository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
+            _taskerRepository = taskerRepository;
         }
 
         public override Task<CustomerResponse> GetAllCustomers(GetAllRequest request, ServerCallContext context)
@@ -32,7 +34,7 @@ namespace AuthService.Services.SyncDataServices.Grpc
         public override Task<TaskerResponse> GetAllTaskers(GetAllRequest request, ServerCallContext context)
         {
             var response = new TaskerResponse();
-            var taskers = _repository.GetAll();
+            var taskers = _taskerRepository.GetAll();
 
             foreach (var cate in taskers)
             {

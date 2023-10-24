@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using ProductService.Repositories.Models;
 using ProductService.Repositories.Repositories;
 using ProductService.Services.CacheService;
+using ProductService.Services.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,13 +16,13 @@ namespace ProductService.API.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
         private ICacheService _cacheService;
 
-        public CustomerController(IOrderRepository orderRepository, IMapper mapper, ICacheService cacheService)
+        public CustomerController(IOrderService orderService, IMapper mapper, ICacheService cacheService)
         {
-            _orderRepository = orderRepository;
+            _orderService = orderService;
             _mapper = mapper;
             _cacheService = cacheService;
         }
@@ -34,7 +35,7 @@ namespace ProductService.API.Controllers
 
             if (cacheCustomers == null)
             {
-                var customerItems = _orderRepository.GetAllCustomers();
+                var customerItems = _orderService.GetAllCustomers();
                 cacheCustomers = _mapper.Map<IEnumerable<CustomerReadModel>>(customerItems);
 
                 _cacheService.SetData(key, cacheCustomers);

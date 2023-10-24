@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using AuthService.Services.CacheService;
 using AuthService.Services.Services;
+using System.Linq;
 
 namespace AuthService.API.Controllers
 {
@@ -29,9 +30,9 @@ namespace AuthService.API.Controllers
 
             if(cacheAccounts == null)
             {
-                var accounts = _accountService.GetAllAccounts();
+                cacheAccounts = _accountService.GetAllAccounts();
 
-                _cacheService.SetData(key, accounts);
+                _cacheService.SetData(key, cacheAccounts);
 
                 return Ok(cacheAccounts);
             }
@@ -48,9 +49,9 @@ namespace AuthService.API.Controllers
 
             if(cacheAccount == null)
             {
-                var account = _accountService.GetAccountById(id);
+                cacheAccount = _accountService.GetAccountById(id);
 
-                _cacheService.SetData<AccountReadModel>(key, account);
+                _cacheService.SetData(key, cacheAccount);
 
                 return Ok(cacheAccount);
             }
@@ -68,6 +69,7 @@ namespace AuthService.API.Controllers
 
             return CreatedAtRoute(nameof(GetAccountById), new { Id = cusRead.Id }, cusRead);
         }
+
     }
 
 }

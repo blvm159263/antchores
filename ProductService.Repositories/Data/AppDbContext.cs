@@ -1,5 +1,6 @@
 using ProductService.Repositories.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ProductService.Repositories.Data
 {
@@ -9,6 +10,18 @@ namespace ProductService.Repositories.Data
         {
 
         }
+
+        /*  public AppDbContext()
+          {
+
+          }
+
+          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+          {
+              optionsBuilder.UseSqlServer("Server=localhost,1433;Initial Catalog=productdb;User ID=sa;Password=12345;");
+          }*/
+
+
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -36,6 +49,9 @@ namespace ProductService.Repositories.Data
                 entity.HasMany(d => d.OrderDetails)
                     .WithOne(p => p.Order)
                     .HasForeignKey(d => d.OrderId);
+                entity.HasMany(d => d.Contacts)
+                    .WithOne(p => p.Order)
+                    .HasForeignKey(d => d.OrderId);
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -44,9 +60,7 @@ namespace ProductService.Repositories.Data
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId);
 
-                entity.HasMany(d => d.Contacts)
-                    .WithOne(p => p.OrderDetail)
-                    .HasForeignKey(d => d.OrderDetailId);
+                
 
                 entity.HasOne(d => d.TaskDetail)
                 .WithMany(p => p.OrderDetails)
@@ -100,11 +114,11 @@ namespace ProductService.Repositories.Data
             });
 
             modelBuilder.Entity<Contact>(entity =>{
-                entity.HasKey(e => new { e.OrderDetailId, e.TaskerId });
+                entity.HasKey(e => new { e.OrderId, e.TaskerId });
 
-                entity.HasOne(d => d.OrderDetail)
+                entity.HasOne(d => d.Order)
                 .WithMany(p => p.Contacts)
-                .HasForeignKey(d => d.OrderDetailId);
+                .HasForeignKey(d => d.OrderId);
 
                 entity.HasOne(d => d.Tasker)
                 .WithMany(p => p.Contacts)

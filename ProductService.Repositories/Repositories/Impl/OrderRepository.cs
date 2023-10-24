@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using ProductService.Repositories.Data;
 using ProductService.Repositories.Entities;
 
@@ -89,5 +90,14 @@ namespace ProductService.Repositories.Repositories.Impl
             return _context.Taskers.Any(c => c.ExternalId == externalTaskerId);
         }
 
+        public IEnumerable<Order> GetOrdersAfterDate(DateTime currentDate)
+        {
+            return _context.Orders
+                .Include(x => x.Customer)
+                .Include(x => x.OrderDetails)
+                .ThenInclude(od => od.TaskDetail)
+                .ThenInclude(td => td.Category)
+                .Where(o => o.StartTime > currentDate);
+        }
     }
 }

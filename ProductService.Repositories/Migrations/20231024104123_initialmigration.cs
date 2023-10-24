@@ -7,7 +7,6 @@ namespace ProductService.Repositories.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             migrationBuilder.Sql("DROP TABLE IF EXISTS Contacts;");
             migrationBuilder.Sql("DROP TABLE IF EXISTS OrderDetails;");
             migrationBuilder.Sql("DROP TABLE IF EXISTS TaskerCerts;");
@@ -144,6 +143,32 @@ namespace ProductService.Repositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Contacts",
+                columns: table => new
+                {
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    TaskerId = table.Column<int>(type: "int", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contacts", x => new { x.OrderId, x.TaskerId });
+                    table.ForeignKey(
+                        name: "FK_Contacts_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Contacts_Taskers_TaskerId",
+                        column: x => x.TaskerId,
+                        principalTable: "Taskers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderDetails",
                 columns: table => new
                 {
@@ -167,31 +192,6 @@ namespace ProductService.Repositories.Migrations
                         name: "FK_OrderDetails_TaskDetails_TaskDetailId",
                         column: x => x.TaskDetailId,
                         principalTable: "TaskDetails",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Contacts",
-                columns: table => new
-                {
-                    OrderDetailId = table.Column<int>(type: "int", nullable: false),
-                    TaskerId = table.Column<int>(type: "int", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contacts", x => new { x.OrderDetailId, x.TaskerId });
-                    table.ForeignKey(
-                        name: "FK_Contacts_OrderDetails_OrderDetailId",
-                        column: x => x.OrderDetailId,
-                        principalTable: "OrderDetails",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Contacts_Taskers_TaskerId",
-                        column: x => x.TaskerId,
-                        principalTable: "Taskers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -233,19 +233,19 @@ namespace ProductService.Repositories.Migrations
                 name: "Contacts");
 
             migrationBuilder.DropTable(
-                name: "TaskerCerts");
-
-            migrationBuilder.DropTable(
                 name: "OrderDetails");
 
             migrationBuilder.DropTable(
-                name: "Taskers");
+                name: "TaskerCerts");
 
             migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "TaskDetails");
+
+            migrationBuilder.DropTable(
+                name: "Taskers");
 
             migrationBuilder.DropTable(
                 name: "Customers");

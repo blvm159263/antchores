@@ -9,6 +9,9 @@ namespace ProductService.Repositories.Models
         public DateTime CreatedAt { get; set; }
         public DateTime WorkingAt { get; set; }
         public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string Address { get; set; }
+        public string CategoryName { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public decimal Total { get; set; }
         public bool Status { get; set; }

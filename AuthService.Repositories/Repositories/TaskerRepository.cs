@@ -1,5 +1,6 @@
 ﻿using AuthService.Repositories.Data;
 using AuthService.Repositories.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,12 +34,16 @@ namespace AuthService.Repositories.Repositories
 
         public IEnumerable<Tasker> GetAll()
         {
-            return _context.Taskers.ToList();
+            return _context.Taskers
+                .Include(x => x.Account)
+                .ToList();
         }
 
         public Tasker GetTaskerById(int id)
         {
-            return _context.Taskers.FirstOrDefault(c => c.Id == id);
+            return _context.Taskers
+                .Include(x => x.Account)
+                .FirstOrDefault(c => c.Id == id);
         }
     }
 }

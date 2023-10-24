@@ -42,7 +42,12 @@ namespace ProductService.Services.CacheService
 
         public void SetData<T>(string key, T value)
         {
-            _distributedCache.SetString(key, JsonSerializer.Serialize(value));
+            var options = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
+            };
+
+            _distributedCache.SetString(key, JsonSerializer.Serialize(value), options);
         }
     }
 }
