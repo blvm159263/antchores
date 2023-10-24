@@ -46,10 +46,17 @@ namespace AuthService.API
             }
             else
             {
-                Console.WriteLine("Using Inmem");
-                services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
+                /*Console.WriteLine("Using Inmem");
+                services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("InMem"));*/
+                Console.WriteLine("Using SqlServer Db local");
+                services.AddDbContext<AppDbContext>(opt =>
+                    opt.UseSqlServer(Configuration.GetConnectionString("AuthConn")));
             }
-
+            services.AddStackExchangeRedisCache(opt =>
+            {
+                string connection = Configuration.GetConnectionString("Redis");
+                opt.Configuration = connection;
+            });
             services.Configure<JwtOptionsModel>(Configuration.GetSection("ApiSettings:JwtOptions"));
 
             services.AddScoped<ICustomerService, CustomerService>();
@@ -66,16 +73,12 @@ namespace AuthService.API
             services.AddGrpc();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthService", Version = "v1" });
-            });
 
             Console.WriteLine($"ProductService Enpoint {Configuration["ProductService"]}");
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "eBookStore.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthService", Version = "v1" });
 
                 c.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
                 {

@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using ProductService.Repositories.Entities;
-using ProductService.Repositories.Repositories;
 using ProductService.Services.SyncDataServices.Grpc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using ProductService.Repositories.Data;
+using ProductService.Services.Services;
 
 namespace ProductService.API.Data
 {
@@ -24,19 +24,18 @@ namespace ProductService.API.Data
                 var taskers = grpcClient.ReturnAllTaskers();
 
                 SeedData(serviceScope.ServiceProvider.GetService<AppDbContext>(),
-                        serviceScope.ServiceProvider.GetService<IOrderRepository>(),
+                        serviceScope.ServiceProvider.GetService<IOrderService>(),
                         customers, taskers, isProd);
             }
         }
 
         private static void SeedData(AppDbContext context,
-                                    IOrderRepository orderRepository,
+                                    IOrderService orderService,
                                     IEnumerable<Customer> customers,
                                     IEnumerable<Tasker> taskers,
                                     bool isProd)
         {
-
-            if (isProd)
+            if (true)
             {
                 Console.WriteLine("--> Attempting to apply migrations...");
                 try
@@ -55,9 +54,9 @@ namespace ProductService.API.Data
                 Console.WriteLine("--> Seeding new data Customer...");
                 foreach (var cus in customers)
                 {
-                    if (!orderRepository.ExternalCustomerExists(cus.ExternalId))
+                    if (!orderService.ExternalCustomerExists(cus.ExternalId))
                     {
-                        orderRepository.CreateCustomer(cus);
+                        orderService.CreateCustomer(cus);
                     }
                 }
             }
@@ -72,9 +71,9 @@ namespace ProductService.API.Data
                 Console.WriteLine("--> Seeding new data Tasker...");
                 foreach (var cus in taskers)
                 {
-                    if (!orderRepository.ExternalTaskerExists(cus.ExternalId))
+                    if (!orderService.ExternalTaskerExists(cus.ExternalId))
                     {
-                        orderRepository.CreateTasker(cus);
+                        orderService.CreateTasker(cus);
                     }
                 }
             }

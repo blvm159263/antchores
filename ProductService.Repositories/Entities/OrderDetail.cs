@@ -20,7 +20,5 @@ namespace ProductService.Repositories.Entities
         public bool Status { get; set; }
         public Order Order { get; set; }
         public TaskDetail TaskDetail { get; set; }
-
-        public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
     }
 }

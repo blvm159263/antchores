@@ -68,7 +68,7 @@ namespace AuthService.API.Controllers
 
                 _cacheService.SetData(key , tasker);
 
-                return Ok(cacheTasker);
+                return Ok(tasker);
             }
 
             return Ok(cacheTasker);

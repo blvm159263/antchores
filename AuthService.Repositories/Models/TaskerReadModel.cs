@@ -10,10 +10,14 @@ namespace AuthService.Repositories.Models
 
         public string Address { get; set; }
 
-        public string Identification { get; set; }
+        public decimal Balance { get; set; }
 
         public bool Status { get; set; }
 
         public int AccountId { get; set; }
+
+        public string Identification { get; set; }
+
+        public string PhoneNumber { get; set; }
     }
 }

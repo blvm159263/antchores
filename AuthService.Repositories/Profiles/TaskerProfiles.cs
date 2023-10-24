@@ -8,12 +8,14 @@ namespace AuthService.Repositories.Profiles
     {
         public TaskerProfile()
         {
-            CreateMap<Tasker, TaskerReadModel>();
-            
+            CreateMap<Tasker, TaskerReadModel>()
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Account.PhoneNumber))
+                .ForMember(dest => dest.Balance, opt => opt.MapFrom(src => src.Account.Balance));
+
             CreateMap<TaskerCreateModel, Tasker>();
-            
+
             CreateMap<TaskerReadModel, TaskerPublishedModel>();
-            
+
             CreateMap<Tasker, GrpcTaskerModel>()
                 .ForMember(dest => dest.TaskerId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))

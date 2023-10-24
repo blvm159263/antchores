@@ -1,10 +1,14 @@
+﻿using ProductService.Repositories.Entities;
+using ProductService.Repositories.Models;
 using System;
 using System.Collections.Generic;
-using ProductService.Repositories.Entities;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ProductService.Repositories.Repositories
+namespace ProductService.Services.Services
 {
-    public interface IOrderRepository
+    public interface IOrderService
     {
         //Customer
         IEnumerable<Customer> GetAllCustomers();
@@ -14,10 +18,7 @@ namespace ProductService.Repositories.Repositories
         bool ExternalCustomerExists(int externalcusId);
 
         //Order
-        IEnumerable<Order> GetAllOrdersForCustomer(int cusId);
-        Order GetOrder(int cusId, int oId);
-        void CreateOrder(int cusId, Order order);
-        IEnumerable<Order> GetOrdersAfterDate(DateTime currentDate);
+        IEnumerable<OrderReadModel> GetOrdersAfterDate(DateTime currentDate);
 
         //Customer
         IEnumerable<Tasker> GetAllTaskers();

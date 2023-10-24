@@ -10,7 +10,7 @@ using ProductService.Repositories.Data;
 namespace ProductService.Repositories.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231016064753_initialmigration")]
+    [Migration("20231024104123_initialmigration")]
     partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace ProductService.Repositories.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ProductService.Entities.Category", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,9 +40,9 @@ namespace ProductService.Repositories.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Contact", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Contact", b =>
                 {
-                    b.Property<int>("OrderDetailId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("TaskerId")
@@ -51,14 +51,17 @@ namespace ProductService.Repositories.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("OrderDetailId", "TaskerId");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("OrderId", "TaskerId");
 
                     b.HasIndex("TaskerId");
 
                     b.ToTable("Contacts");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Customer", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Customer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,7 +91,7 @@ namespace ProductService.Repositories.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Order", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,7 +126,7 @@ namespace ProductService.Repositories.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.OrderDetail", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,7 +154,7 @@ namespace ProductService.Repositories.Migrations
                     b.ToTable("OrderDetails");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.TaskDetail", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.TaskDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,7 +194,7 @@ namespace ProductService.Repositories.Migrations
                     b.ToTable("TaskDetails");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Tasker", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Tasker", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -225,7 +228,7 @@ namespace ProductService.Repositories.Migrations
                     b.ToTable("Taskers");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.TaskerCert", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.TaskerCert", b =>
                 {
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -246,28 +249,28 @@ namespace ProductService.Repositories.Migrations
                     b.ToTable("TaskerCerts");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Contact", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Contact", b =>
                 {
-                    b.HasOne("ProductService.Entities.OrderDetail", "OrderDetail")
+                    b.HasOne("ProductService.Repositories.Entities.Order", "Order")
                         .WithMany("Contacts")
-                        .HasForeignKey("OrderDetailId")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProductService.Entities.Tasker", "Tasker")
+                    b.HasOne("ProductService.Repositories.Entities.Tasker", "Tasker")
                         .WithMany("Contacts")
                         .HasForeignKey("TaskerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OrderDetail");
+                    b.Navigation("Order");
 
                     b.Navigation("Tasker");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Order", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Order", b =>
                 {
-                    b.HasOne("ProductService.Entities.Customer", "Customer")
+                    b.HasOne("ProductService.Repositories.Entities.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -276,15 +279,15 @@ namespace ProductService.Repositories.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.OrderDetail", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.OrderDetail", b =>
                 {
-                    b.HasOne("ProductService.Entities.Order", "Order")
+                    b.HasOne("ProductService.Repositories.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProductService.Entities.TaskDetail", "TaskDetail")
+                    b.HasOne("ProductService.Repositories.Entities.TaskDetail", "TaskDetail")
                         .WithMany("OrderDetails")
                         .HasForeignKey("TaskDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -295,9 +298,9 @@ namespace ProductService.Repositories.Migrations
                     b.Navigation("TaskDetail");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.TaskDetail", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.TaskDetail", b =>
                 {
-                    b.HasOne("ProductService.Entities.Category", "Category")
+                    b.HasOne("ProductService.Repositories.Entities.Category", "Category")
                         .WithMany("TaskDetails")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -306,15 +309,15 @@ namespace ProductService.Repositories.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.TaskerCert", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.TaskerCert", b =>
                 {
-                    b.HasOne("ProductService.Entities.Category", "Category")
+                    b.HasOne("ProductService.Repositories.Entities.Category", "Category")
                         .WithMany("TaskerCerts")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProductService.Entities.Tasker", "Tasker")
+                    b.HasOne("ProductService.Repositories.Entities.Tasker", "Tasker")
                         .WithMany("TaskerCerts")
                         .HasForeignKey("TaskerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -325,34 +328,31 @@ namespace ProductService.Repositories.Migrations
                     b.Navigation("Tasker");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Category", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Category", b =>
                 {
                     b.Navigation("TaskDetails");
 
                     b.Navigation("TaskerCerts");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Customer", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Customer", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
-                });
-
-            modelBuilder.Entity("ProductService.Entities.OrderDetail", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Order", b =>
                 {
                     b.Navigation("Contacts");
+
+                    b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.TaskDetail", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.TaskDetail", b =>
                 {
                     b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("ProductService.Entities.Tasker", b =>
+            modelBuilder.Entity("ProductService.Repositories.Entities.Tasker", b =>
                 {
                     b.Navigation("Contacts");
 

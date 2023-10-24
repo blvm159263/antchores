@@ -19,8 +19,9 @@ using ProductService.Repositories.Data;
 using ProductService.Repositories.Repositories;
 using ProductService.Repositories.Repositories.Impl;
 using ProductService.Services.EventProcessing;
-using AuthService.Services.CacheService;
 using ProductService.Services.CacheService;
+using ProductService.Services.Services;
+using ProductService.Services.Services.Impl;
 
 namespace ProductService
 {
@@ -47,9 +48,13 @@ namespace ProductService
             }
             else
             {
-                Console.WriteLine("--> Using InMem Db");
+                /*Console.WriteLine("--> Using InMem Db");
                 services.AddDbContext<AppDbContext>(opt =>
-                     opt.UseInMemoryDatabase("InMem"));
+                     opt.UseInMemoryDatabase("InMem"));*/
+
+                Console.WriteLine("--> Using SqlServer Db local");
+                services.AddDbContext<AppDbContext>(opt =>
+                    opt.UseSqlServer(Configuration.GetConnectionString("ProductConn")));
             }
             services.AddStackExchangeRedisCache(opt =>
             {
@@ -58,7 +63,11 @@ namespace ProductService
             });
 
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ITaskerRepository, TaskerRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ITaskerService, TaskerService>();
 
             services.AddControllers();
 

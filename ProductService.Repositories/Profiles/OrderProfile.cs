@@ -2,6 +2,7 @@ using ProductService.Repositories.Entities;
 using ProductService.Repositories.Models;
 using AutoMapper;
 using AuthService;
+using System.Linq;
 
 namespace ProductService.Repositories.Profiles
 {
@@ -11,7 +12,10 @@ namespace ProductService.Repositories.Profiles
         {
             //Order
             CreateMap<OrderCreateModel, Order>();
-            CreateMap<Order, OrderReadModel>();
+            CreateMap<Order, OrderReadModel>()
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Customer.Address))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.OrderDetails.First().TaskDetail.Category.Name))
+                .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.GetEndTime()));
 
             //Customer
             CreateMap<Customer, CustomerReadModel>();
@@ -28,21 +32,6 @@ namespace ProductService.Repositories.Profiles
             .ForMember(dest => dest.Orders, opt => opt.Ignore())
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
-            //Tasker
-            CreateMap<Tasker, TaskerReadModel>();
-            CreateMap<TaskerPublishedModel, Tasker>()
-            .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
-            CreateMap<GrpcTaskerModel, Tasker>()
-            .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.TaskerId))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-            .ForMember(dest => dest.Identification, opt => opt.MapFrom(src => src.Identification))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-            .ForMember(dest => dest.Contacts, opt => opt.Ignore())
-            .ForMember(dest => dest.TaskerCerts, opt => opt.Ignore())
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
         }
 
     }

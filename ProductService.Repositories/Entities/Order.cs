@@ -31,5 +31,29 @@ namespace ProductService.Repositories.Entities
         public Customer Customer { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
+        public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
+
+        public DateTime GetEndTime()
+        {
+            // Perform some logic to obtain the EndTime
+            DateTime endTime = this.StartTime;
+            foreach (OrderDetail detail in OrderDetails)
+            {
+                var unit = detail.TaskDetail.Unit;
+                switch (unit)
+                {
+                    case DurationUnit.Minute:
+                        //add more minute to endTime
+                        endTime = endTime.AddMinutes(detail.TaskDetail.Duration);
+                        break;
+                    case DurationUnit.Hour:
+                        //add more hour to endTime
+                        endTime = endTime.AddHours(detail.TaskDetail.Duration);
+                        break;
+                }
+            }
+            return endTime; // Adjust this according to your data model
+        }
     }
 }
