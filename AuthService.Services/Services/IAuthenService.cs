@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace AuthService.Services.Services
 {
-	public interface IAuthService
+	public interface IAuthenService
 	{
-		AccountReadModel Authenticate(string phoneNumber, string password);
+        AuthenticateResponseModel Authenticate(string phoneNumber, string password);
 	}
 }

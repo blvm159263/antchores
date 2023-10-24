@@ -57,11 +57,14 @@ namespace AuthService.API
                 string connection = Configuration.GetConnectionString("Redis");
                 opt.Configuration = connection;
             });
+
             services.Configure<JwtOptionsModel>(Configuration.GetSection("ApiSettings:JwtOptions"));
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ITaskerService, TaskerService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAuthenService, AuthenService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ICacheService, CacheService>();
 
             services.AddScoped<CustomerRepository>();

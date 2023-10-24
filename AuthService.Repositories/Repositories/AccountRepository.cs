@@ -59,5 +59,10 @@ namespace AuthService.Repositories.Repositories
             _context.Accounts.Remove(Account);
             _context.SaveChanges();
         }
+
+        public Account GetAccountByPhoneNumberAndPassword(string phoneNumber, string password)
+        {
+            return _context.Accounts.SingleOrDefault(c => c.PhoneNumber == phoneNumber && c.Password == password);
+        }
     }
 }
