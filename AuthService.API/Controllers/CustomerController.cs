@@ -46,9 +46,9 @@ namespace AuthService.API.Controllers
 
             if (cacheCustomers == null)
             {
-                var customers = _customerService.GetAllCustomers();
+                cacheCustomers = _customerService.GetAllCustomers();
 
-                _cacheService.SetData<IEnumerable<CustomerReadModel>>(key, customers);
+                _cacheService.SetData(key, cacheCustomers);
                 
                 return Ok(cacheCustomers);
             }
@@ -66,9 +66,9 @@ namespace AuthService.API.Controllers
 
             if(cacheCustomer == null)
             {
-                var customer = _customerService.GetCustomerById(id);
+                cacheCustomer = _customerService.GetCustomerById(id);
 
-                _cacheService.SetData(key, customer);
+                _cacheService.SetData(key, cacheCustomer);
 
                 return Ok(cacheCustomer);
             }

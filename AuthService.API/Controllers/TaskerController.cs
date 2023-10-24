@@ -44,9 +44,9 @@ namespace AuthService.API.Controllers
 
             if (cacheTaskers == null)
             {
-                var taskers = _taskerService.GetAllTaskers();
+                cacheTaskers = _taskerService.GetAllTaskers();
 
-                _cacheService.SetData(key, taskers);
+                _cacheService.SetData(key, cacheTaskers);
 
                 return Ok(cacheTaskers);
             }
@@ -64,11 +64,11 @@ namespace AuthService.API.Controllers
 
             if (cacheTasker == null)
             {
-                var tasker = _taskerService.GetTaskerById(id);
+                cacheTasker = _taskerService.GetTaskerById(id);
 
-                _cacheService.SetData(key , tasker);
+                _cacheService.SetData(key , cacheTasker);
 
-                return Ok(tasker);
+                return Ok(cacheTasker);
             }
 
             return Ok(cacheTasker);
