@@ -6,7 +6,7 @@ using System;
 
 namespace AuthService.API.Controllers
 {
-    [Route("api/auths")]
+    [Route("api/a/auths")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {

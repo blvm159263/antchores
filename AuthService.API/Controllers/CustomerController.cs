@@ -13,7 +13,7 @@ using AuthService.Services.Services;
 
 namespace AuthService.API.Controllers
 {
-    [Route("api/customers")]
+    [Route("api/a/customers")]
     [ApiController]
     public class CustomerController : ControllerBase
     {

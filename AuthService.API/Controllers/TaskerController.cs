@@ -11,7 +11,7 @@ using AuthService.Services.Services;
 
 namespace AuthService.API.Controllers
 {
-    [Route("api/taskers")]
+    [Route("api/a/taskers")]
     [ApiController]
     public class TaskerController : ControllerBase
     {

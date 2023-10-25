@@ -10,35 +10,14 @@ spec:
     - host: antchores-v1.com
       http:
         paths:
-          - path: /api/customers
+          - path: /api/a/customers
             pathType: Prefix
             backend:
               service:
                 name: auths-clusterip-srv
                 port:
                   number: 80
-          - path: /api/accounts
-            pathType: Prefix
-            backend:
-              service:
-                name: auths-clusterip-srv
-                port:
-                  number: 80
-          - path: /api/taskers
-            pathType: Prefix
-            backend:
-              service:
-                name: auths-clusterip-srv
-                port:
-                  number: 80
-          - path: /api/auths
-            pathType: Prefix
-            backend:
-              service:
-                name: auths-clusterip-srv
-                port:
-                  number: 80
-          - path: /api/c/customers
+          - path: /api/c
             pathType: Prefix
             backend:
               service:

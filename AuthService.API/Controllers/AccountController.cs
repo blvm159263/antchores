@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace AuthService.API.Controllers
 {
-    [Route("api/accounts")]
+    [Route("api/a/accounts")]
     [ApiController]
     public class AccountController : ControllerBase
     {
