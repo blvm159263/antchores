@@ -12,7 +12,7 @@ using System.Text.Json;
 
 namespace ProductService.API.Controllers
 {
-    [Route("api/c/customers")]
+    [Route("api/p/customers")]
     [ApiController]
     public class CustomerController : ControllerBase
     {

@@ -72,9 +72,13 @@ namespace ProductService
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<ITaskerRepository, TaskerRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ITaskerService, TaskerService>();
+            services.AddScoped<ICategoryService,  CategoryService>();
 
             services.AddControllers();
 
@@ -85,7 +89,7 @@ namespace ProductService
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthService", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProductService", Version = "v1" });
 
                 c.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
                 {

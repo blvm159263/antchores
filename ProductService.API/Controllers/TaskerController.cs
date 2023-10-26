@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace ProductService.API.Controllers
 {
-    [Route("api/c/taskers")]
+    [Route("api/p/taskers")]
     [ApiController]
     public class TaskerController : Controller
     {

@@ -10,7 +10,7 @@ namespace AuthService.Repositories.Models
     public class AccountModel
     {
         public string PhoneNumber { get; set; }
-        public Role Role { get; set; }
+        public string Role { get; set; }
         public int UserId { get; set; }
     }
 }
