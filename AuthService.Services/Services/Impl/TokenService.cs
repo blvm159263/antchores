@@ -29,7 +29,7 @@ namespace AuthService.Services.Services.Impl
             {
                 new Claim("PhoneNumber", accountModel.PhoneNumber),
                 new Claim("UserId", accountModel.UserId.ToString()),
-                new Claim(ClaimTypes.Role, accountModel.Role.ToString())
+                new Claim(ClaimTypes.Role, accountModel.Role)
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

@@ -12,6 +12,7 @@ namespace ProductService.Repositories.Entities
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Description { get; set; }
         [Required]
         public bool Status { get; set; }
         public ICollection<TaskerCert> TaskerCerts { get; set; } = new List<TaskerCert>();
