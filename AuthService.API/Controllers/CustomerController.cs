@@ -10,6 +10,7 @@ using AuthService.Repositories.Repositories;
 using AuthService.Services.SyncDataServices.Http;
 using AuthService.Services.CacheService;
 using AuthService.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthService.API.Controllers
 {
@@ -37,6 +38,7 @@ namespace AuthService.API.Controllers
             _cacheService = cacheService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult<IEnumerable<CustomerReadModel>> GetAllCustomers()
         {
@@ -56,7 +58,7 @@ namespace AuthService.API.Controllers
             return Ok(cacheCustomers);
         }
 
-
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id}", Name = "GetCustomerById")]
         public ActionResult<CustomerReadModel> GetCustomerById(int id)
         {
@@ -76,7 +78,7 @@ namespace AuthService.API.Controllers
             return Ok(cacheCustomer);
         }
 
-        [HttpPost("accounts/{accountId}")]
+        /*[HttpPost("accounts/{accountId}")]
         public async Task<ActionResult<CustomerReadModel>> CreateCustomer(int accountId, CustomerCreateModel customerCreateModel)
         {
 
@@ -84,9 +86,9 @@ namespace AuthService.API.Controllers
                 return NotFound();
                 
 
-            /*var cusModel = _mapper.Map<Customer>(customerCreateModel);
+            *//*var cusModel = _mapper.Map<Customer>(customerCreateModel);
             cusModel.AccountId = accountId;
-            _customerRepository.CreateCustomer(cusModel);*/
+            _customerRepository.CreateCustomer(cusModel);*//*
 
             var cusRead = _customerService.CreateCustomer(accountId, customerCreateModel);
 
@@ -113,6 +115,6 @@ namespace AuthService.API.Controllers
             }
 
             return CreatedAtRoute(nameof(GetCustomerById), new { Id = cusRead.Id }, cusRead);
-        }
+        }*/
     }
 }

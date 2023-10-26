@@ -8,6 +8,7 @@ using AuthService.Repositories.Models;
 using AuthService.Services.SyncDataServices.Http;
 using AuthService.Services.CacheService;
 using AuthService.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthService.API.Controllers
 {
@@ -35,6 +36,7 @@ namespace AuthService.API.Controllers
             _taskerService = taskerService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult<IEnumerable<TaskerReadModel>> GetAllTaskers()
         {
@@ -53,8 +55,8 @@ namespace AuthService.API.Controllers
 
             return Ok(cacheTaskers);
         }
-
-
+        
+        [Authorize(Roles = "Tasker")]
         [HttpGet("{id}", Name = "GetTaskerById")]
         public ActionResult<IEnumerable<TaskerReadModel>> GetTaskerById(int id)
         {
@@ -74,7 +76,7 @@ namespace AuthService.API.Controllers
             return Ok(cacheTasker);
         }
 
-        [HttpPost("accounts/{accountId}")]
+        /*[HttpPost("accounts/{accountId}")]
         public async Task<ActionResult<TaskerReadModel>> CreateTasker(
             int accountId, TaskerCreateModel taskerCreateModel)
         {
@@ -82,13 +84,13 @@ namespace AuthService.API.Controllers
             if (!_taskerService.AccountExists(accountId))
                 return NotFound();
 
-            /*var cusModel = _mapper.Map<Tasker>(taskerCreateModel);
+            *//*var cusModel = _mapper.Map<Tasker>(taskerCreateModel);
             cusModel.AccountId = accountId;
-            _taskerRepository.CreateTasker(cusModel);*/
+            _taskerRepository.CreateTasker(cusModel);*//*
 
             var cusRead = _taskerService.CreateTasker(accountId, taskerCreateModel);
 
-           /* var cusRead = _mapper.Map<TaskerReadModel>(cusModel);*/
+           *//* var cusRead = _mapper.Map<TaskerReadModel>(cusModel);*//*
 
             // //Send Sync Message
             // try
@@ -113,6 +115,6 @@ namespace AuthService.API.Controllers
             }
 
             return CreatedAtRoute(nameof(GetTaskerById), new { Id = cusRead.Id }, cusRead);
-        }
+        }*/
     }
 }
