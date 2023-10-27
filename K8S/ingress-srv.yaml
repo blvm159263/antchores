@@ -17,7 +17,7 @@ spec:
                 name: auths-clusterip-srv
                 port:
                   number: 80
-          - path: /api/c
+          - path: /api/p
             pathType: Prefix
             backend:
               service:

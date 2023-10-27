@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace ProductService.API.Controllers
 {
-    [Route("api/c/orders")]
+    [Route("api/p/orders")]
     [ApiController]
     public class OrderController : ControllerBase
     {

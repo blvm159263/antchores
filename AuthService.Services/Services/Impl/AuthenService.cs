@@ -36,7 +36,7 @@ namespace AuthService.Services.Services.Impl
             {
                 UserId = account.Id,
                 PhoneNumber = account.PhoneNumber,
-                Role = account.Role
+                Role = account.Role.ToString()
             };
 
             var token = _tokenService.GenerateToken(accountModel);
