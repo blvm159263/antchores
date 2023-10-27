@@ -10,7 +10,7 @@ spec:
     - host: antchores-v1.com
       http:
         paths:
-          - path: /api/a/customers
+          - path: /api/a
             pathType: Prefix
             backend:
               service:

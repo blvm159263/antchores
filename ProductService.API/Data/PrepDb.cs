@@ -35,7 +35,7 @@ namespace ProductService.API.Data
                                     IEnumerable<Tasker> taskers,
                                     bool isProd)
         {
-            if (true)
+            if (isProd)
             {
                 Console.WriteLine("--> Attempting to apply migrations...");
                 try
