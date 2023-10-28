@@ -39,6 +39,11 @@ namespace ProductService.Repositories.Profiles
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
 
             CreateMap<TaskerModel, Tasker>().ReverseMap();
+
+            //TaskDetail
+            CreateMap<TaskDetail, TaskDetailCreateModel>().ReverseMap();
+
+            CreateMap<TaskDetail, TaskDetailReadModel>().ReverseMap();
         }
     }
 }
