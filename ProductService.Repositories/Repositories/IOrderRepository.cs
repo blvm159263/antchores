@@ -11,13 +11,14 @@ namespace ProductService.Repositories.Repositories
         void CreateCustomer(Customer cus);
         bool CustomerExists(int cusId);
 
-        bool ExternalCustomerExists(int externalcusId);
+        bool ExternalCustomerExists(int externalcusId); 
 
         //Order
         IEnumerable<Order> GetAllOrdersForCustomer(int cusId);
         Order GetOrder(int cusId, int oId);
         void CreateOrder(int cusId, Order order);
         IEnumerable<Order> GetOrdersAfterDate(DateTime currentDate);
+        IEnumerable<Order> GetApproriateOrderByCategoriesOfTasker(int taskerId);
 
         //Customer
         IEnumerable<Tasker> GetAllTaskers();

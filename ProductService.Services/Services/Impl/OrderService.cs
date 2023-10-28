@@ -52,5 +52,11 @@ namespace ProductService.Services.Services.Impl
             IEnumerable<Order> orders = _orderRepository.GetOrdersAfterDate(currentDate);
             return _mapper.Map<IEnumerable<OrderReadModel>>(orders);
         }
+
+        public IEnumerable<OrderReadModel> GetApproriateOrderByCategoriesOfTasker(int taskerId)
+        {
+            IEnumerable<Order> orders = _orderRepository.GetApproriateOrderByCategoriesOfTasker(taskerId);
+            return _mapper.Map<IEnumerable<OrderReadModel>>(orders);
+        }
     }
 }

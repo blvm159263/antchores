@@ -99,5 +99,25 @@ namespace ProductService.Repositories.Repositories.Impl
                 .ThenInclude(td => td.Category)
                 .Where(o => o.StartTime > currentDate);
         }
+
+        public IEnumerable<Order> GetApproriateOrderByCategoriesOfTasker(int taskerId)
+        {
+            IEnumerable<TaskerCert> taskerCerts = _context.TaskerCerts.Where(tc => tc.TaskerId == taskerId);
+            IList<int> categoryIds = taskerCerts.Select(tc => tc.CategoryId).ToList();
+
+            IEnumerable<Order> approriateOrders = _context.Orders
+                .Include(x => x.OrderDetails)
+                .ThenInclude(od => od.TaskDetail)
+                .ThenInclude(td => td.Category)
+                .Where(
+                    o => o.OrderDetails.Any(od => categoryIds.Contains(od.TaskDetail.CategoryId)) &&
+                    (
+                        o.StartTime > DateTime.Now || 
+                        (o.StartTime == DateTime.Now && o.StartTime.Hour > DateTime.Now.Hour + 3)
+                    )
+                );
+
+            return approriateOrders;
+        }
     }
 }
