@@ -12,6 +12,7 @@ namespace ProductService.Repositories.Profiles
         {
             //Order
             CreateMap<OrderCreateModel, Order>();
+
             CreateMap<Order, OrderReadModel>()
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Customer.Address))
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.OrderDetails.First().TaskDetail.Category.Name))
@@ -19,18 +20,20 @@ namespace ProductService.Repositories.Profiles
 
             //Customer
             CreateMap<Customer, CustomerReadModel>();
+            
             CreateMap<CustomerPublishedModel, Customer>()
-            .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.Orders, opt => opt.Ignore())
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
+                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Orders, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+            
             CreateMap<GrpcCustomerModel, Customer>()
-            .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.CustomerId))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-            .ForMember(dest => dest.Orders, opt => opt.Ignore())
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
+                .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.CustomerId))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.Orders, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         }
 

@@ -77,44 +77,5 @@ namespace AuthService.API.Controllers
 
             return Ok(cacheCustomer);
         }
-
-        /*[HttpPost("accounts/{accountId}")]
-        public async Task<ActionResult<CustomerReadModel>> CreateCustomer(int accountId, CustomerCreateModel customerCreateModel)
-        {
-
-            if(!_customerService.AccountExists(accountId))
-                return NotFound();
-                
-
-            *//*var cusModel = _mapper.Map<Customer>(customerCreateModel);
-            cusModel.AccountId = accountId;
-            _customerRepository.CreateCustomer(cusModel);*//*
-
-            var cusRead = _customerService.CreateCustomer(accountId, customerCreateModel);
-
-            //Send Sync Message
-            try
-            {
-                await _authDataClient.SendCustomerToAuth(cusRead);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Could not send synchronously!: " + ex.Message);
-            }
-
-            //Send Async Message
-            try
-            {
-                var CustomerPublishedModel = _mapper.Map<CustomerPublishedModel>(cusRead);
-                CustomerPublishedModel.Event = "Customer_Published";
-                _messageBusClient.PublishNewCustomer(CustomerPublishedModel);
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("Could not send asynchronously!: " + ex.Message);
-            }
-
-            return CreatedAtRoute(nameof(GetCustomerById), new { Id = cusRead.Id }, cusRead);
-        }*/
     }
 }

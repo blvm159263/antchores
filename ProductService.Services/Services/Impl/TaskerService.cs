@@ -13,13 +13,16 @@ namespace ProductService.Services.Services.Impl
     {
         private readonly ITaskerRepository _taskerRepository;
         private readonly IMapper _mapper;
-        private readonly IContactRepository _contactRepository;
+        private readonly IContractRepository _contractRepository;
+        private readonly ITaskerCertRepository _taskerCertRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public TaskerService(ITaskerRepository taskerRepository, IContactRepository contactRepository, IMapper mapper)
+        public TaskerService(ITaskerRepository taskerRepository, IContractRepository contactRepository, IMapper mapper, ITaskerCertRepository taskerCertRepository)
         {
             _taskerRepository = taskerRepository;
             _mapper = mapper;
-            _contactRepository = contactRepository;
+            _contractRepository = contactRepository;
+            _taskerCertRepository = taskerCertRepository;
         }
 
         public IEnumerable<TaskerCertReadModel> GetTaskerCertsByTaskerId(int taskerId)
@@ -29,7 +32,7 @@ namespace ProductService.Services.Services.Impl
         }
         public IEnumerable<OrderReadModel> GetOrdersAvailableOfTasker(int taskerId, DateTime time)
         {
-            IEnumerable<Contact> contacts = _contactRepository.GetContactsByTaskerId(taskerId);
+            IEnumerable<Contract> contacts = _contractRepository.GetContractsByTaskerId(taskerId);
             Console.WriteLine(time);
             Console.WriteLine("contact: " + contacts.Count());
             var availableOrders = contacts
@@ -37,6 +40,55 @@ namespace ProductService.Services.Services.Impl
                 .Select(contact => _mapper.Map<OrderReadModel>(contact.Order));
 
             return availableOrders;
+        }
+
+        public TaskerModel AddCategoryServiceForTasker(int taskerId, List<int> categoryIds)
+        {
+            TaskerModel taskerModel = new TaskerModel();
+
+            foreach (int categoryId in categoryIds)
+            {
+                TaskerCert taskerCert = new TaskerCert
+                {
+                    TaskerId = taskerId,
+                    CategoryId = categoryId,
+                    CreateAt = DateTime.Now,
+                    Status = true
+                };
+
+                _taskerCertRepository.AddCategoryForTasker(taskerCert);
+
+                Tasker tasker = _taskerRepository.GetTaskerById(taskerId);
+
+                IEnumerable<TaskerCert> taskerCerts = tasker.TaskerCerts;
+
+                IEnumerable<Category> categories = taskerCerts.Select(cert => cert.Category);
+
+                IEnumerable<CategoryReadModel> categoryReadModels = _mapper.Map<IEnumerable<CategoryReadModel>>(categories);
+
+                taskerModel = _mapper.Map<TaskerModel>(tasker);
+
+                taskerModel.Categories = categoryReadModels;
+            }
+
+            return taskerModel;
+        }
+
+        public TaskerModel GetTaskerById(int taskerId)
+        {
+            Tasker tasker = _taskerRepository.GetTaskerById(taskerId);
+
+            IEnumerable<TaskerCert> taskerCerts = tasker.TaskerCerts;
+
+            IEnumerable<Category> categories = taskerCerts.Select(cert => cert.Category);
+
+            IEnumerable<CategoryReadModel> categoryReadModels = _mapper.Map<IEnumerable<CategoryReadModel>>(categories);
+
+            TaskerModel taskerModel = _mapper.Map<TaskerModel>(tasker);
+
+            taskerModel.Categories = categoryReadModels;
+
+            return taskerModel;
         }
     }
 }

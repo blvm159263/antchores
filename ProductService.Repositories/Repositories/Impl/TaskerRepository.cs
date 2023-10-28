@@ -31,14 +31,14 @@ namespace ProductService.Repositories.Repositories.Impl
         {
             return _context.Taskers
             .Include(x => x.TaskerCerts)
-            .Include(x => x.Contacts);
+            .Include(x => x.Contracts);
         }
 
         public Tasker GetTaskerByExternalId(int externalId)
         {
             return _context.Taskers
             .Include(x => x.TaskerCerts)
-            .Include(x => x.Contacts)
+            .Include(x => x.Contracts)
             .FirstOrDefault(x => x.ExternalId == externalId);
         }
 
@@ -46,7 +46,7 @@ namespace ProductService.Repositories.Repositories.Impl
         {
            return _context.Taskers
             .Include(x => x.TaskerCerts)
-            .Include(x => x.Contacts)
+            .ThenInclude(x => x.Category)
             .FirstOrDefault(x => x.Id == id);
         }
 

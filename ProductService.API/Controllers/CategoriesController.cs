@@ -71,6 +71,13 @@ namespace ProductService.API.Controllers
         {
             var categoryItem = _categoryService.AddCategory(categoryCreateModel);
 
+            if(categoryItem == null)
+            {
+                return BadRequest();
+            }
+
+            refreshCache(categoryItem.Id);
+
             return CreatedAtAction(nameof(GetCategoryById), new { id = categoryItem.Id }, categoryItem);
         }
 
@@ -78,6 +85,8 @@ namespace ProductService.API.Controllers
         public IActionResult UpdateCategory(CategoryCreateModel categoryCreateModel, int id)
         {
             var categoryItem = _categoryService.UpdateCategory(categoryCreateModel, id);
+
+            refreshCache(id);
 
             return Ok(categoryItem);
         }
@@ -87,7 +96,20 @@ namespace ProductService.API.Controllers
         {
             var categoryItem =  _categoryService.DeleteCategory(id);
 
+            refreshCache(id);
+
             return Ok(categoryItem);
+        }
+
+        private void refreshCache(int id)
+        {
+            string getAllKey = "allCategories";
+
+            string getByIdKey = $"category-{id}";
+
+            _cacheService.RemoveData(getAllKey);
+
+            _cacheService.RemoveData(getByIdKey);
         }
     }
 }

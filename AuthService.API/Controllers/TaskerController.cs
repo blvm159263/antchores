@@ -75,46 +75,5 @@ namespace AuthService.API.Controllers
 
             return Ok(cacheTasker);
         }
-
-        /*[HttpPost("accounts/{accountId}")]
-        public async Task<ActionResult<TaskerReadModel>> CreateTasker(
-            int accountId, TaskerCreateModel taskerCreateModel)
-        {
-
-            if (!_taskerService.AccountExists(accountId))
-                return NotFound();
-
-            *//*var cusModel = _mapper.Map<Tasker>(taskerCreateModel);
-            cusModel.AccountId = accountId;
-            _taskerRepository.CreateTasker(cusModel);*//*
-
-            var cusRead = _taskerService.CreateTasker(accountId, taskerCreateModel);
-
-           *//* var cusRead = _mapper.Map<TaskerReadModel>(cusModel);*//*
-
-            // //Send Sync Message
-            // try
-            // {
-            //     await _authDataClient.SendTaskerToAuth(cusRead);
-            // }
-            // catch (Exception ex)
-            // {
-            //     Console.WriteLine("Could not send synchronously!: " + ex.Message);
-            // }
-
-            //Send Async Message
-            try
-            {
-                var taskerPublishedModel = _mapper.Map<TaskerPublishedModel>(cusRead);
-                taskerPublishedModel.Event = "Tasker_Published";
-                _messageBusClient.PublishNewTasker(taskerPublishedModel);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Could not send asynchronously!: " + ex.Message);
-            }
-
-            return CreatedAtRoute(nameof(GetTaskerById), new { Id = cusRead.Id }, cusRead);
-        }*/
     }
 }
