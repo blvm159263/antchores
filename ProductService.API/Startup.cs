@@ -75,11 +75,13 @@ namespace ProductService
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<ITaskerCertRepository, TaskerCertRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
 
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ITaskerService, TaskerService>();
             services.AddScoped<ICategoryService,  CategoryService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddControllers();
 
