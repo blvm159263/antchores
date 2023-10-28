@@ -14,6 +14,7 @@ namespace ProductService.Repositories.Profiles
         public CategoryProfile()
         {
             CreateMap<Category, CategoryReadModel>().ReverseMap();
+
             CreateMap<Category, CategoryCreateModel>().ReverseMap();
         }
     }

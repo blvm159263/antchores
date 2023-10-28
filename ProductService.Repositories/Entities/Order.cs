@@ -32,7 +32,7 @@ namespace ProductService.Repositories.Entities
 
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
-        public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
+        public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
         public DateTime GetEndTime()
         {

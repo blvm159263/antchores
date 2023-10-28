@@ -26,7 +26,7 @@ namespace ProductService.Repositories.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
         public DbSet<Tasker> Taskers { get; set; }
         public DbSet<TaskerCert> TaskerCerts { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -49,7 +49,7 @@ namespace ProductService.Repositories.Data
                 entity.HasMany(d => d.OrderDetails)
                     .WithOne(p => p.Order)
                     .HasForeignKey(d => d.OrderId);
-                entity.HasMany(d => d.Contacts)
+                entity.HasMany(d => d.Contracts)
                     .WithOne(p => p.Order)
                     .HasForeignKey(d => d.OrderId);
             });
@@ -104,7 +104,7 @@ namespace ProductService.Repositories.Data
 
             modelBuilder.Entity<Tasker>(entity =>
             {
-                entity.HasMany(d => d.Contacts)
+                entity.HasMany(d => d.Contracts)
                 .WithOne(p => p.Tasker)
                 .HasForeignKey(d => d.TaskerId);
 
@@ -113,15 +113,15 @@ namespace ProductService.Repositories.Data
                 .HasForeignKey(d => d.TaskerId);
             });
 
-            modelBuilder.Entity<Contact>(entity =>{
+            modelBuilder.Entity<Contract>(entity =>{
                 entity.HasKey(e => new { e.OrderId, e.TaskerId });
 
                 entity.HasOne(d => d.Order)
-                .WithMany(p => p.Contacts)
+                .WithMany(p => p.Contracts)
                 .HasForeignKey(d => d.OrderId);
 
                 entity.HasOne(d => d.Tasker)
-                .WithMany(p => p.Contacts)
+                .WithMany(p => p.Contracts)
                 .HasForeignKey(d => d.TaskerId);
             });
         }
