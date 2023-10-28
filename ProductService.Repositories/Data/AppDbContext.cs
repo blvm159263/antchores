@@ -31,6 +31,7 @@ namespace ProductService.Repositories.Data
         public DbSet<TaskerCert> TaskerCerts { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<TaskDetail> TaskDetails { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -43,6 +44,8 @@ namespace ProductService.Repositories.Data
 
             modelBuilder.Entity<Order>(entity =>
             {
+                entity.Property(e => e.State)
+                    .HasConversion<string>();
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CustomerId);
@@ -59,8 +62,6 @@ namespace ProductService.Repositories.Data
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId);
-
-                
 
                 entity.HasOne(d => d.TaskDetail)
                 .WithMany(p => p.OrderDetails)
@@ -113,7 +114,8 @@ namespace ProductService.Repositories.Data
                 .HasForeignKey(d => d.TaskerId);
             });
 
-            modelBuilder.Entity<Contract>(entity =>{
+            modelBuilder.Entity<Contract>(entity =>
+            {
                 entity.HasKey(e => new { e.OrderId, e.TaskerId });
 
                 entity.HasOne(d => d.Order)

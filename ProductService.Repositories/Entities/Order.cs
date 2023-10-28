@@ -27,6 +27,10 @@ namespace ProductService.Repositories.Entities
         public bool Status { get; set; }
 
         [Required]
+        [Column(TypeName = "nvarchar(50)")]
+        public OrderEnum State { get; set; } = OrderEnum.Pending;
+
+        [Required]
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
 
