@@ -75,5 +75,25 @@ namespace AuthService.API.Controllers
 
             return Ok(cacheTasker);
         }
+
+        [Authorize(Roles = "Tasker")]
+        [HttpGet("account/{id}")]
+        public ActionResult<IEnumerable<TaskerReadModel>> GetTaskerByAccountId(int id)
+        {
+            string key = $"tasker-accountId-{id}";
+
+            var cacheTasker = _cacheService.GetData<TaskerReadModel>(key);
+
+            if (cacheTasker == null)
+            {
+                cacheTasker = _taskerService.GetTaskerByAccountId(id);
+
+                _cacheService.SetData(key , cacheTasker);
+
+                return Ok(cacheTasker);
+            }
+
+            return Ok(cacheTasker);
+        }
     }
 }

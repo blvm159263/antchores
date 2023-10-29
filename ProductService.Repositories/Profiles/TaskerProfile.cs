@@ -44,6 +44,11 @@ namespace ProductService.Repositories.Profiles
             CreateMap<TaskDetail, TaskDetailCreateModel>().ReverseMap();
 
             CreateMap<TaskDetail, TaskDetailReadModel>().ReverseMap();
+
+            //Contact
+            CreateMap<ContractCreateModel, Contract>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => DateTime.Now));
         }
     }
 }

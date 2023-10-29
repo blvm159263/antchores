@@ -11,15 +11,15 @@ namespace ProductService.Repositories.Data
 
         }
 
-        /*  public AppDbContext()
-          {
+        /*public AppDbContext()
+        {
 
-          }
+        }
 
-          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-          {
-              optionsBuilder.UseSqlServer("Server=localhost,1433;Initial Catalog=productdb;User ID=sa;Password=12345;");
-          }*/
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=localhost,1433;Initial Catalog=productdb;User ID=sa;Password=12345;");
+        }*/
 
 
 

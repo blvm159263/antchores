@@ -18,7 +18,7 @@ namespace AuthService.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult Authenticate([FromBody] AuthenticateRequestModel authenticateRequestModel)
+        public ActionResult Authenticate(AuthenticateRequestModel authenticateRequestModel)
         {
             var account = _authenService.Authenticate(authenticateRequestModel.PhoneNumber, authenticateRequestModel.Password);
 

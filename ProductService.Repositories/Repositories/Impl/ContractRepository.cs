@@ -17,6 +17,16 @@ namespace ProductService.Repositories.Repositories.Impl
             _context = context;
         }
 
+        public bool CreateContact(Contract con)
+        {
+            if (con == null)
+            {
+                throw new ArgumentNullException(nameof(con));
+            }
+            _context.Contracts.Add(con);
+            return _context.SaveChanges() > 0;
+        }
+
         public IEnumerable<Contract> GetContractsByTaskerId(int taskerId)
         {
             return _context.Contracts

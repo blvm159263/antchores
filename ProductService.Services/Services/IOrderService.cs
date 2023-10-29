@@ -27,5 +27,8 @@ namespace ProductService.Services.Services
         bool TaskerExists(int cusId);
 
         bool ExternalTaskerExists(int externalcusId);
+
+        //Order detail
+        IEnumerable<OrderDetailReadModel> GetDetailByOrderId(int orderId);
     }
 }

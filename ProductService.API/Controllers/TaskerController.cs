@@ -88,5 +88,18 @@ namespace ProductService.API.Controllers
 
             return Ok(taskerModel);
         }
+
+        [HttpPost("{taskerId}/order/{orderId}")]
+        public ActionResult<string> CreateContract(int orderId, int taskerId) { 
+            ContractCreateModel contractCreateModel = new ContractCreateModel();
+            contractCreateModel.OrderId = orderId;
+            contractCreateModel.TaskerId = taskerId;
+            bool result = _taskerService.CreateContract(contractCreateModel);
+            if(result)
+            {
+                return Ok($"Contact create successful for tasker {taskerId} with order {orderId}");
+            }
+            return BadRequest("Cannot create! Check again!");
+        }
     }
 }

@@ -45,5 +45,12 @@ namespace AuthService.Repositories.Repositories
                 .Include(x => x.Account)
                 .FirstOrDefault(c => c.Id == id);
         }
+
+        public Tasker GetTaskerByAccountId(int accountId)
+        {
+            return _context.Taskers
+                .Include(x => x.Account)
+                .FirstOrDefault(c => c.AccountId == accountId);
+        }
     }
 }

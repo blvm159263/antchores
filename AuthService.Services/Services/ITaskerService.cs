@@ -13,5 +13,7 @@ namespace AuthService.Services.Services
         TaskerReadModel GetTaskerById(int id);
         TaskerReadModel CreateTasker(int accountId, TaskerCreateModel taskerCreateModel);
         bool AccountExists(int accountId);
+
+        TaskerReadModel GetTaskerByAccountId(int accountId);
     }
 }

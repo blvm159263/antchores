@@ -49,6 +49,15 @@ namespace AuthService.Services.Services.Impl
             return taskerReadModels;
         }
 
+        public TaskerReadModel GetTaskerByAccountId(int accountId)
+        {
+            var tasker = _taskerRepository.GetTaskerByAccountId(accountId);
+
+            var taskerReadModel = _mapper.Map<TaskerReadModel>(tasker);
+
+            return taskerReadModel;
+        }
+
         public TaskerReadModel GetTaskerById(int id)
         {
             var tasker = _taskerRepository.GetTaskerById(id);

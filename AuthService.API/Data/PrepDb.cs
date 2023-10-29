@@ -23,7 +23,7 @@ namespace AuthService.API.Data
         private static void SeedData(AppDbContext context, bool isProd)
         {
 
-            if (isProd)
+            if (true)
             {
                 Console.WriteLine("--> Attempting to appply migration...");
                 try

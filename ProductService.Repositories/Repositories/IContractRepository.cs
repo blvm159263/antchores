@@ -7,6 +7,6 @@ namespace ProductService.Repositories.Repositories
     {
         IEnumerable<Contract> GetContractsByTaskerId(int taskerId);
 
-
+        bool CreateContact(Contract con);
     }
 }

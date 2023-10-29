@@ -35,6 +35,10 @@ namespace ProductService.Repositories.Profiles
                 .ForMember(dest => dest.Orders, opt => opt.Ignore())
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
 
+            //OrderDetail
+            CreateMap<OrderDetail, OrderDetailReadModel>()
+                .ForMember(dest => dest.TaskDetailName, opt => opt.MapFrom(x => x.TaskDetail.Name));
+
         }
 
     }

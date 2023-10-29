@@ -15,11 +15,13 @@ namespace ProductService.Services.Services.Impl
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
+        private readonly IOrderDetailRepository _orderDetailRepository;
 
-        public OrderService(IOrderRepository orderRepository, IMapper mapper)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
+            _orderDetailRepository = orderDetailRepository;
         }
 
         public void CreateCustomer(Customer cus) 
@@ -57,6 +59,12 @@ namespace ProductService.Services.Services.Impl
         {
             IEnumerable<Order> orders = _orderRepository.GetApproriateOrderByCategoriesOfTasker(taskerId);
             return _mapper.Map<IEnumerable<OrderReadModel>>(orders);
+        }
+
+        public IEnumerable<OrderDetailReadModel> GetDetailByOrderId(int orderId)
+        {
+            var od = _orderDetailRepository.GetByOrderId(orderId);
+            return _mapper.Map<IEnumerable<OrderDetailReadModel>>(od);
         }
     }
 }

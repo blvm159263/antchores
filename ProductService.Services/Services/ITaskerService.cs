@@ -17,5 +17,7 @@ namespace ProductService.Services.Services
         TaskerModel AddCategoryServiceForTasker(int taskerId, List<int> categoryIds);
 
         TaskerModel GetTaskerById(int taskerId);
+
+        bool CreateContract(ContractCreateModel contractCreateModel);
     }
 }

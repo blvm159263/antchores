@@ -90,5 +90,11 @@ namespace ProductService.Services.Services.Impl
 
             return taskerModel;
         }
+
+        public bool CreateContract(ContractCreateModel contractCreateModel)
+        {
+            var contract = _mapper.Map<Contract>(contractCreateModel);
+            return _contractRepository.CreateContact(contract);
+        }
     }
 }
