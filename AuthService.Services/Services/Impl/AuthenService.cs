@@ -34,7 +34,7 @@ namespace AuthService.Services.Services.Impl
 
             AccountModel accountModel = new AccountModel
             {
-                UserId = account.Id,
+                AccountId = account.Id,
                 PhoneNumber = account.PhoneNumber,
                 Role = account.Role.ToString()
             };

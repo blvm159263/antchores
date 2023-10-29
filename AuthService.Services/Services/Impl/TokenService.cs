@@ -28,7 +28,7 @@ namespace AuthService.Services.Services.Impl
             var claims = new List<Claim>
             {
                 new Claim("PhoneNumber", accountModel.PhoneNumber),
-                new Claim("UserId", accountModel.UserId.ToString()),
+                new Claim("UserId", accountModel.AccountId.ToString()),
                 new Claim(ClaimTypes.Role, accountModel.Role)
             };
 
