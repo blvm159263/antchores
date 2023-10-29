@@ -19,6 +19,7 @@ namespace ProductService.Repositories.Repositories
         void CreateOrder(int cusId, Order order);
         IEnumerable<Order> GetOrdersAfterDate(DateTime currentDate);
         IEnumerable<Order> GetApproriateOrderByCategoriesOfTasker(int taskerId);
+        Order GetOrderByOrderId(int orderId);
 
         //Customer
         IEnumerable<Tasker> GetAllTaskers();

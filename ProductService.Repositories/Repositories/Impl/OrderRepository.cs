@@ -112,12 +112,20 @@ namespace ProductService.Repositories.Repositories.Impl
                 .Where(
                     o => o.OrderDetails.Any(od => categoryIds.Contains(od.TaskDetail.CategoryId)) &&
                     (
-                        o.StartTime > DateTime.Now || 
+                        o.StartTime > DateTime.Now ||
                         (o.StartTime == DateTime.Now && o.StartTime.Hour > DateTime.Now.Hour + 3)
                     )
                 );
 
             return approriateOrders;
         }
+
+        public Order GetOrderByOrderId(int orderId)
+        => _context.Orders
+                .Include(x => x.Customer)
+                .Include(x => x.OrderDetails)
+                .ThenInclude(od => od.TaskDetail)
+                .ThenInclude(td => td.Category)
+                .FirstOrDefault(o => o.Id == orderId);
     }
 }

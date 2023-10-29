@@ -24,10 +24,10 @@ namespace ProductService.API.Controllers
             _cacheService = cacheService;
         }
 
-        [HttpGet("after-date")]
-        public ActionResult<IEnumerable<OrderReadModel>> GetOrdersAfterDate(DateTime currentDate)
+        [HttpGet("available")]
+        public ActionResult<IEnumerable<OrderReadModel>> GetOrdersAfterDate()
         {
-            IEnumerable<OrderReadModel> orders = _orderService.GetOrdersAfterDate(currentDate);
+            IEnumerable<OrderReadModel> orders = _orderService.GetOrdersAfterDate(DateTime.Now);
             if (orders == null)
             {
                 return NotFound();
@@ -35,10 +35,10 @@ namespace ProductService.API.Controllers
             return Ok(orders);
         }
 
+        [HttpGet("{orderId}/orderdetails")]
         public ActionResult<IEnumerable<OrderDetailReadModel>> GetOrderDetailsByOrderId(int orderId)
         {
             string key = $"orderDetails-orderId{orderId}";
-
 
             var orderdetail = _cacheService.GetData<IEnumerable<OrderDetailReadModel>>(key);
             if (orderdetail == null)
@@ -49,6 +49,22 @@ namespace ProductService.API.Controllers
             }
 
             return Ok(orderdetail);
+        }
+
+        [HttpGet("{orderId}")]
+        public ActionResult<OrderReadModel> GetOrderByOrderId(int orderId)
+        {
+            string key = $"order-orderId{orderId}";
+            var order = _cacheService.GetData<OrderReadModel>(key);
+            if (order == null)
+            {
+                order = _orderService.GetOrderByOrderId(orderId);
+                _cacheService.SetData(key, order);
+                return Ok(order);
+            }
+
+            return Ok(order);
+
         }
     }
 }

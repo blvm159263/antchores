@@ -66,5 +66,11 @@ namespace ProductService.Services.Services.Impl
             var od = _orderDetailRepository.GetByOrderId(orderId);
             return _mapper.Map<IEnumerable<OrderDetailReadModel>>(od);
         }
+
+        public OrderReadModel GetOrderByOrderId(int orderId)
+        {
+            var order = _orderRepository.GetOrderByOrderId(orderId);
+            return _mapper.Map<OrderReadModel>(order);
+        }
     }
 }
