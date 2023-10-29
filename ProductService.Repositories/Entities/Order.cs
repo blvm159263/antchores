@@ -27,12 +27,16 @@ namespace ProductService.Repositories.Entities
         public bool Status { get; set; }
 
         [Required]
+        [Column(TypeName = "nvarchar(50)")]
+        public OrderEnum State { get; set; } = OrderEnum.Pending;
+
+        [Required]
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
-        public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
+        public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
         public DateTime GetEndTime()
         {

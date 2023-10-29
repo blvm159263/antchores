@@ -71,14 +71,19 @@ namespace ProductService
 
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<ITaskerRepository, TaskerRepository>();
-            services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<ITaskerCertRepository, TaskerCertRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<ITaskDetailRepository, TaskDetailRepository>();
 
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ITaskerService, TaskerService>();
             services.AddScoped<ICategoryService,  CategoryService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<ITaskDetailService, TaskDetailService>();
 
             services.AddControllers();
 

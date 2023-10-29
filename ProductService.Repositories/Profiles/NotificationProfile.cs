@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace ProductService.Repositories.Profiles
 {
-    public class CategoryProfile : Profile
+    public class NotificationProfile : Profile
     {
-        public CategoryProfile()
+        public NotificationProfile()
         {
-            CreateMap<Category, CategoryReadModel>().ReverseMap();
+            CreateMap<Notification, NotificationModel>().ReverseMap();
 
-            CreateMap<Category, CategoryCreateModel>().ReverseMap();
+            CreateMap<Notification, NotificationCreateModel>().ReverseMap();
         }
     }
 }

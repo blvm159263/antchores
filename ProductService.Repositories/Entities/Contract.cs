@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace ProductService.Repositories.Entities
 {
-    public class Contact
+    public class Contract
     {
         [Key]
         [Column(Order = 0)]

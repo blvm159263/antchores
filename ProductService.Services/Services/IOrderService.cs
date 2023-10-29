@@ -19,6 +19,7 @@ namespace ProductService.Services.Services
 
         //Order
         IEnumerable<OrderReadModel> GetOrdersAfterDate(DateTime currentDate);
+        IEnumerable<OrderReadModel> GetApproriateOrderByCategoriesOfTasker(int taskerId);
 
         //Customer
         IEnumerable<Tasker> GetAllTaskers();

@@ -29,7 +29,7 @@ namespace ProductService.Repositories.Entities
 
         public ICollection<TaskerCert> TaskerCerts { get; set; } = new List<TaskerCert>();
 
-        public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
+        public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
     }
 }

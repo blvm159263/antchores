@@ -7,19 +7,19 @@ using ProductService.Repositories.Entities;
 
 namespace ProductService.Repositories.Repositories.Impl
 {
-    public class ContactRepository : IContactRepository
+    public class ContractRepository : IContractRepository
     {
 
         private readonly AppDbContext _context;
 
-        public ContactRepository(AppDbContext context)
+        public ContractRepository(AppDbContext context)
         {
             _context = context;
         }
 
-        public IEnumerable<Contact> GetContactsByTaskerId(int taskerId)
+        public IEnumerable<Contract> GetContractsByTaskerId(int taskerId)
         {
-            return _context.Contacts
+            return _context.Contracts
                     .Include(x => x.Tasker)
                     .Include(x => x.Order)
                         .ThenInclude(c => c.OrderDetails)

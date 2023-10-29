@@ -13,12 +13,14 @@ namespace ProductService.API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly ITaskDetailService _taskDetailService;
         private readonly ICacheService _cacheService;
 
-        public CategoriesController(ICategoryService categoryService, ICacheService cacheService)
+        public CategoriesController(ICategoryService categoryService, ICacheService cacheService, ITaskDetailService taskDetailService)
         {
             _categoryService = categoryService;
             _cacheService = cacheService;
+            _taskDetailService = taskDetailService;
         }
 
         [HttpGet]
@@ -71,6 +73,13 @@ namespace ProductService.API.Controllers
         {
             var categoryItem = _categoryService.AddCategory(categoryCreateModel);
 
+            if(categoryItem == null)
+            {
+                return BadRequest();
+            }
+
+            refreshCache(categoryItem.Id);
+
             return CreatedAtAction(nameof(GetCategoryById), new { id = categoryItem.Id }, categoryItem);
         }
 
@@ -78,6 +87,8 @@ namespace ProductService.API.Controllers
         public IActionResult UpdateCategory(CategoryCreateModel categoryCreateModel, int id)
         {
             var categoryItem = _categoryService.UpdateCategory(categoryCreateModel, id);
+
+            refreshCache(id);
 
             return Ok(categoryItem);
         }
@@ -87,7 +98,58 @@ namespace ProductService.API.Controllers
         {
             var categoryItem =  _categoryService.DeleteCategory(id);
 
+            refreshCache(id);
+
             return Ok(categoryItem);
+        }
+
+        [HttpGet("{id}/taskDetails")]
+        public IActionResult GetTaskDetailsByCategoryId(int id)
+        {
+            var cacheKey = $"taskDetails-{id}";
+
+            var cacheTaskDetails = _cacheService.GetData<IEnumerable<TaskDetailReadModel>>(cacheKey);
+
+            if (cacheTaskDetails == null)
+            {
+                var taskDetails = _taskDetailService.GetTaskDetailsByCategoryId(id);
+
+                _cacheService.SetData(cacheKey, taskDetails);
+
+                return Ok(taskDetails);
+            }
+
+            return Ok(cacheTaskDetails);
+        }
+
+        [HttpPost("{id}/taskDetails")]
+        public IActionResult AddTaskDetail(TaskDetailCreateModel taskDetailCreateModel, int id)
+        {
+            taskDetailCreateModel.CategoryId = id;
+
+            var taskDetailItem = _taskDetailService.CreateTaskDetail(taskDetailCreateModel);
+
+            if (taskDetailItem == null)
+            {
+                return BadRequest();
+            }
+
+            var cacheKey = $"taskDetails-{id}";
+            _cacheService.RemoveData(cacheKey);
+
+            return CreatedAtAction(nameof(GetTaskDetailsByCategoryId), new { id = taskDetailItem.Id }, taskDetailItem);
+        }
+
+
+        private void refreshCache(int id)
+        {
+            string getAllKey = "allCategories";
+
+            string getByIdKey = $"category-{id}";
+
+            _cacheService.RemoveData(getAllKey);
+
+            _cacheService.RemoveData(getByIdKey);
         }
     }
 }

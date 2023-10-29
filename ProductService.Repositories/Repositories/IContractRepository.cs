@@ -3,9 +3,9 @@ using ProductService.Repositories.Entities;
 
 namespace ProductService.Repositories.Repositories
 {
-    public interface IContactRepository
+    public interface IContractRepository
     {
-        IEnumerable<Contact> GetContactsByTaskerId(int taskerId);
+        IEnumerable<Contract> GetContractsByTaskerId(int taskerId);
 
 
     }

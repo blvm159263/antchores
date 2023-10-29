@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ProductService.Repositories.Models
 {
-    public class CategoryCreateModel
+    public class NotificationModel
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public bool Status { get; set; } = true;
+        public int Id { get; set; }
+        public string Message { get; set; }
+        public DateTime Created { get; set; }
     }
 }
