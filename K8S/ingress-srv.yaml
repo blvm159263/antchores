@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
-    - host: antchores-v1.com
+    - host: antchores-v2.com
       http:
         paths:
           - path: /api/a

@@ -42,7 +42,7 @@ namespace AuthService.API.Controllers
             _taskerService = taskerService;
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult<IEnumerable<AccountReadModel>> GetAllAccounts()
         {
