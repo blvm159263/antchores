@@ -11,6 +11,6 @@ namespace AuthService.Repositories.Models
     {
         public string PhoneNumber { get; set; }
         public string Role { get; set; }
-        public int UserId { get; set; }
+        public int AccountId { get; set; }
     }
 }
