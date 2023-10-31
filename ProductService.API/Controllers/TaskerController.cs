@@ -69,6 +69,7 @@ namespace ProductService.API.Controllers
 
         [HttpGet("{id}/orders/available")]
         public ActionResult<IEnumerable<OrderReadModel>> GetOrderAvailableForTasker(int id, DateTime time) {
+            Console.WriteLine(time);
             IEnumerable<OrderReadModel> orders = _taskerService.GetOrdersAvailableOfTasker(id, time);
             if (orders.Count() < 1) return NotFound();
 
