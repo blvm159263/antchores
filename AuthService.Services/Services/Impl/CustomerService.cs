@@ -24,6 +24,15 @@ namespace AuthService.Services.Services.Impl
             return res;
         }
 
+        public CustomerReadModel GetCustomerByAccountId(int accountId)
+        {
+            var customer = _customerRepository.GetCustomerByAccountId(accountId);
+
+            var customerModel = _mapper.Map<CustomerReadModel>(customer);
+
+            return customerModel;
+        }
+
         public CustomerReadModel CreateCustomer(int accountId, CustomerCreateModel customerCreateModel)
         {
             var cusModel = _mapper.Map<Customer>(customerCreateModel);

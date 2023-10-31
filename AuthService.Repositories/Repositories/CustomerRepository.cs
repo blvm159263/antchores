@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthService.Repositories.Repositories
 {
@@ -39,6 +40,12 @@ namespace AuthService.Repositories.Repositories
         public Customer GetCustomerById(int id)
         {
             return _context.Customers.SingleOrDefault(c => c.Id == id);
+        }
+
+        public Customer GetCustomerByAccountId(int accountId)
+        {
+            var customer = _context.Customers.SingleOrDefault(x => x.AccountId == accountId);
+            return customer;
         }
     }
 }

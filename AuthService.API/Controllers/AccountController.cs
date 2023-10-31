@@ -81,7 +81,7 @@ namespace AuthService.API.Controllers
             return Ok(cacheAccount);
         }
 
-        [HttpPost("{id}/customers")]
+        [HttpPost("{id}/customer")]
         public async Task<ActionResult<CustomerReadModel>> CreateCustomer(int id, CustomerCreateModel customerCreateModel)
         {
 
@@ -115,7 +115,7 @@ namespace AuthService.API.Controllers
             return CreatedAtRoute(nameof(GetCustomerById), new { Id = cusRead.Id }, cusRead);
         }
 
-        [HttpPost("{id}/taskers")]
+        [HttpPost("{id}/tasker")]
         public async Task<ActionResult<TaskerReadModel>> CreateTasker(
             int id, TaskerCreateModel taskerCreateModel)
         {
@@ -140,6 +140,21 @@ namespace AuthService.API.Controllers
             return CreatedAtRoute(nameof(GetTaskerById), new { Id = cusRead.Id }, cusRead);
         }
 
+        [HttpGet("{accountId}/customer")]
+        public ActionResult<CustomerReadModel> GetCustomerByAccountId(int accountId)
+        {
+            var res = _customerService.GetCustomerByAccountId(accountId);
+            
+            Console.WriteLine(res);
+
+            if (res == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(res);
+        }
+        
         private ActionResult<CustomerReadModel> GetCustomerById(int id)
         {
             string key = $"customer-{id}";
