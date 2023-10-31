@@ -33,8 +33,6 @@ namespace ProductService.Services.Services.Impl
         public IEnumerable<OrderReadModel> GetOrdersAvailableOfTasker(int taskerId, DateTime time)
         {
             IEnumerable<Contract> contacts = _contractRepository.GetContractsByTaskerId(taskerId);
-            Console.WriteLine(time);
-            Console.WriteLine("contact: " + contacts.Count());
             var availableOrders = contacts
                 .Where(contact => contact.Order.StartTime > time)
                 .Select(contact => _mapper.Map<OrderReadModel>(contact.Order));
