@@ -19,7 +19,7 @@ namespace ProductService.Repositories.Entities
         [Required]
         public int Duration { get; set; }
         [Required]
-        public DurationUnit Unit { get; set; }
+        public QuantityUnit Unit { get; set; }
         [Required]
         public int Quantity { get; set; }
         [Required]

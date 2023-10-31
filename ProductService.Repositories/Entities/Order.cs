@@ -45,17 +45,7 @@ namespace ProductService.Repositories.Entities
             foreach (OrderDetail detail in OrderDetails)
             {
                 var unit = detail.TaskDetail.Unit;
-                switch (unit)
-                {
-                    case DurationUnit.Minute:
-                        //add more minute to endTime
-                        endTime = endTime.AddMinutes(detail.TaskDetail.Duration);
-                        break;
-                    case DurationUnit.Hour:
-                        //add more hour to endTime
-                        endTime = endTime.AddHours(detail.TaskDetail.Duration);
-                        break;
-                }
+                endTime = endTime.AddMinutes(detail.TaskDetail.Duration);
             }
             return endTime; // Adjust this according to your data model
         }
