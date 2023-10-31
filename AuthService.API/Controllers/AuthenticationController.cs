@@ -17,19 +17,31 @@ namespace AuthService.API.Controllers
             _authenService = authenService;
         }
 
-        [HttpPost]
-        public ActionResult Authenticate(AuthenticateRequestModel authenticateRequestModel)
+        [HttpPost("login")]
+        public ActionResult Authenticate([FromBody] AuthenticateRequestModel authenticateRequestModel)
         {
-            var account = _authenService.Authenticate(authenticateRequestModel.PhoneNumber, authenticateRequestModel.Password);
-
-            Console.WriteLine(account);
-
+            var account = 
+                _authenService.Authenticate(authenticateRequestModel.PhoneNumber, authenticateRequestModel.Password);
+            
             if (account == null)
             {
-                return BadRequest(new { message = "Phone number or password is incorrect" });
+                return NotFound(new { message = "Phone number or password is incorrect" });
             }
 
             return Ok(account);
+        }
+
+        [HttpPost("register")]
+        public ActionResult Register(AuthenticateRequestModel authenticateRequestModel)
+        {
+            var res = _authenService.Register(authenticateRequestModel);
+
+            if (res == null)
+            {
+                return BadRequest(new { message = "Phone number is already taken" });
+            }
+
+            return Ok(res);
         }
     }
 }

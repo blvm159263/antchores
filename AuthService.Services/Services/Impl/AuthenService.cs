@@ -47,5 +47,39 @@ namespace AuthService.Services.Services.Impl
                 Token = token
             };
         }
+
+        public AuthenticateResponseModel Register(AuthenticateRequestModel registerRequestModel)
+        {
+            var account = _accountRepository.GetAccountByPhoneNumberAndPassword(registerRequestModel.PhoneNumber, registerRequestModel.PhoneNumber);
+
+            if (account != null)
+            {
+                return null;
+            }
+
+            account = new Account
+            {
+                PhoneNumber = registerRequestModel.PhoneNumber,
+                Password = registerRequestModel.Password,
+                Role = Role.Customer
+            };
+
+            _accountRepository.CreateAccount(account);
+
+            AccountModel accountModel = new AccountModel
+            {
+                AccountId = account.Id,
+                PhoneNumber = account.PhoneNumber,
+                Role = account.Role.ToString()
+            };
+
+            var token = _tokenService.GenerateToken(accountModel);
+
+            return new AuthenticateResponseModel
+            {
+                Account = accountModel,
+                Token = token
+            };
+        }
     }
 }

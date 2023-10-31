@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Repositories.Models;
 using ProductService.Services.CacheService;
 using ProductService.Services.Services;
-using ProductService.Services.Services.Impl;
-using System.Collections.Generic;
 
 namespace ProductService.API.Controllers
 {
@@ -103,7 +101,7 @@ namespace ProductService.API.Controllers
             return Ok(categoryItem);
         }
 
-        [HttpGet("{id}/taskDetails")]
+        [HttpGet("{id}/task-details")]
         public IActionResult GetTaskDetailsByCategoryId(int id)
         {
             var cacheKey = $"taskDetails-{id}";
@@ -122,25 +120,7 @@ namespace ProductService.API.Controllers
             return Ok(cacheTaskDetails);
         }
 
-        [HttpPost("{id}/taskDetails")]
-        public IActionResult AddTaskDetail(TaskDetailCreateModel taskDetailCreateModel, int id)
-        {
-            taskDetailCreateModel.CategoryId = id;
-
-            var taskDetailItem = _taskDetailService.CreateTaskDetail(taskDetailCreateModel);
-
-            if (taskDetailItem == null)
-            {
-                return BadRequest();
-            }
-
-            var cacheKey = $"taskDetails-{id}";
-            _cacheService.RemoveData(cacheKey);
-
-            return CreatedAtAction(nameof(GetTaskDetailsByCategoryId), new { id = taskDetailItem.Id }, taskDetailItem);
-        }
-
-
+        #region refresh cache
         private void refreshCache(int id)
         {
             string getAllKey = "allCategories";
@@ -151,5 +131,6 @@ namespace ProductService.API.Controllers
 
             _cacheService.RemoveData(getByIdKey);
         }
+        #endregion
     }
 }

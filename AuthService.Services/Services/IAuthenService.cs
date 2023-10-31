@@ -10,5 +10,6 @@ namespace AuthService.Services.Services
 	public interface IAuthenService
 	{
         AuthenticateResponseModel Authenticate(string phoneNumber, string password);
+        AuthenticateResponseModel Register(AuthenticateRequestModel registerRequestModel);
 	}
 }
