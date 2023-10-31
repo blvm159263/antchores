@@ -67,9 +67,8 @@ namespace ProductService.API.Controllers
             return Ok(taskerCertReadModels);
         }
 
-        [HttpGet("{id}/orders/available")]
+        [HttpGet("{id}/orders/day")]
         public ActionResult<IEnumerable<OrderReadModel>> GetOrderAvailableForTasker(int id, DateTime time) {
-            Console.WriteLine(time);
             if(time == null) time = DateTime.Now;
             IEnumerable<OrderReadModel> orders = _taskerService.GetOrdersAvailableOfTasker(id, time);
             if (orders.Count() < 1) return NotFound();
@@ -96,6 +95,10 @@ namespace ProductService.API.Controllers
             ContractCreateModel contractCreateModel = new ContractCreateModel();
             contractCreateModel.OrderId = orderId;
             contractCreateModel.TaskerId = taskerId;
+            bool isExist = _taskerService.IsContractExist(contractCreateModel);
+            if(isExist){
+                return NotFound("Contract is exist!");
+            }
             bool result = _taskerService.CreateContract(contractCreateModel);
             if(result)
             {

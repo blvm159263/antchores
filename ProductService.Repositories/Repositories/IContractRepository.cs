@@ -8,5 +8,7 @@ namespace ProductService.Repositories.Repositories
         IEnumerable<Contract> GetContractsByTaskerId(int taskerId);
 
         bool CreateContact(Contract con);
+
+        Contract GetContractsByTaskerIdAndOrderId(int taskerId, int orderId);
     }
 }

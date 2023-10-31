@@ -38,5 +38,17 @@ namespace ProductService.Repositories.Repositories.Impl
                     .Include(o => o.Order.Customer)
                     .Where(x => x.TaskerId == taskerId);
         }
+
+        public Contract GetContractsByTaskerIdAndOrderId(int taskerId, int orderId)
+        {
+             return _context.Contracts
+                    .Include(x => x.Tasker)
+                    .Include(x => x.Order)
+                        .ThenInclude(c => c.OrderDetails)
+                        .ThenInclude(od => od.TaskDetail)
+                        .ThenInclude(td => td.Category)
+                    .Include(o => o.Order.Customer)
+                    .FirstOrDefault(x => x.TaskerId == taskerId && x.OrderId == orderId);
+        }
     }
 }

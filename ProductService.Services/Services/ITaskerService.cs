@@ -19,5 +19,7 @@ namespace ProductService.Services.Services
         TaskerModel GetTaskerById(int taskerId);
 
         bool CreateContract(ContractCreateModel contractCreateModel);
+
+        bool IsContractExist(ContractCreateModel contractCreateModel);
     }
 }

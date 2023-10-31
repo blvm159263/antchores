@@ -33,8 +33,11 @@ namespace ProductService.Services.Services.Impl
         public IEnumerable<OrderReadModel> GetOrdersAvailableOfTasker(int taskerId, DateTime time)
         {
             IEnumerable<Contract> contacts = _contractRepository.GetContractsByTaskerId(taskerId);
+            DateTime endDay = time.AddDays(1);
+            endDay = new DateTime(endDay.Year, endDay.Month, endDay.Day, 0, 0, 0);
+            time = new DateTime(time.Year, time.Month, time.Day, 0, 0, 0);
             var availableOrders = contacts
-                .Where(contact => contact.Order.StartTime > time)
+                .Where(contact => contact.Order.StartTime > time && contact.Order.StartTime < endDay)
                 .Select(contact => _mapper.Map<OrderReadModel>(contact.Order));
 
             return availableOrders;
@@ -93,6 +96,16 @@ namespace ProductService.Services.Services.Impl
         {
             var contract = _mapper.Map<Contract>(contractCreateModel);
             return _contractRepository.CreateContact(contract);
+        }
+
+        public bool IsContractExist(ContractCreateModel contractCreateModel)
+        {
+            var contact = _contractRepository.GetContractsByTaskerIdAndOrderId(contractCreateModel.TaskerId, contractCreateModel.OrderId);
+            if(contact == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
