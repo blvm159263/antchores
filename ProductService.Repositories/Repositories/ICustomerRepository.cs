@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace ProductService.Repositories.Repositories
 {
-    public interface IOrderDetailRepository
+    public interface ICustomerRepository
     {
-        IEnumerable<OrderDetail> GetByOrderId(int orderId);
-        void CreateOrderDetail(OrderDetail orderDetail);
+        Customer GetCustomerById(int id);
     }
 }

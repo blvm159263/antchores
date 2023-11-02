@@ -23,6 +23,8 @@ namespace ProductService.Services.Services
         IEnumerable<OrderReadModel> GetApproriateOrderByCategoriesOfTasker(int taskerId);
         OrderReadModel GetOrderByOrderId(int orderId);
         IEnumerable<OrderReadModel> GetOrdersByStateAndAfterDate(OrderEnum state,DateTime currentDate);
+        IEnumerable<OrderReadModel> GetOrdersByStateAndAfterDateByCustomerId(OrderEnum state,DateTime currentDate, int customerId);
+        void CreateOrder(CartModel cartModel);
 
         //Customer
         IEnumerable<Tasker> GetAllTaskers();

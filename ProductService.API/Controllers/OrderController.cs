@@ -104,5 +104,26 @@ namespace ProductService.API.Controllers
             }
             return Ok(orders);
         }
+
+        [HttpPost]
+        public ActionResult<OrderReadModel> CreateOrder(CartModel cartModel)
+        {
+            try
+            {
+                _orderService.CreateOrder(cartModel);
+                return Ok(new
+                {
+                    message = "Create order successfully!"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = "Create order failed!"
+                });
+            }
+
+        }
     }
 }

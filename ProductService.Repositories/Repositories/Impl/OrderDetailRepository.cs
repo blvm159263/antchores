@@ -17,6 +17,12 @@ namespace ProductService.Repositories.Repositories.Impl
             _context = context;
         }
 
+        public void CreateOrderDetail(OrderDetail orderDetail)
+        {
+            _context.OrderDetails.Add(orderDetail);
+            _context.SaveChanges();
+        }
+
         public IEnumerable<OrderDetail> GetByOrderId(int orderId)
         {
             return _context.OrderDetails

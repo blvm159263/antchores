@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using ProductService.Repositories.Data;
 using ProductService.Repositories.Entities;
 using ProductService.Repositories.Enums;
@@ -131,7 +132,7 @@ namespace ProductService.Repositories.Repositories.Impl
 
         public bool UpdateOrder(Order order)
         {
-            _context.Orders.Update(order);
+            _context.Entry(order).State = EntityState.Modified;
             return _context.SaveChanges() > 0;
         }
 
