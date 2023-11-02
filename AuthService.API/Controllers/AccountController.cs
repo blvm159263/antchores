@@ -81,7 +81,7 @@ namespace AuthService.API.Controllers
             return Ok(cacheAccount);
         }
 
-        [HttpPost("{id}/customers")]
+        /*[HttpPost("{id}/customers")]
         public async Task<ActionResult<CustomerReadModel>> CreateCustomer(int id, CustomerCreateModel customerCreateModel)
         {
 
@@ -111,14 +111,11 @@ namespace AuthService.API.Controllers
             {
                 Console.WriteLine("Could not send asynchronously!: " + ex.Message);
             }
-
-            // return CreatedAtRoute(nameof(GetCustomerById), new { Id = cusRead.Id }, cusRead);
             return Created("", cusRead);
         }
 
         [HttpPost("{id}/taskers")]
-        public async Task<ActionResult<TaskerReadModel>> CreateTasker(
-            int id, TaskerCreateModel taskerCreateModel)
+        public async Task<ActionResult<TaskerReadModel>> CreateTasker(int id, TaskerCreateModel taskerCreateModel)
         {
 
             if (!_taskerService.AccountExists(id))
@@ -137,10 +134,8 @@ namespace AuthService.API.Controllers
             {
                 Console.WriteLine("Could not send asynchronously!: " + ex.Message);
             }
-
-            // return CreatedAtRoute(nameof(GetTaskerById), new { Id = cusRead.Id }, cusRead);
             return Created("", cusRead);
-        }
+        }*/
 
         [HttpGet("{id}/customers")]
         public ActionResult<CustomerReadModel> GetCustomerByAccountId(int id)
@@ -156,42 +151,18 @@ namespace AuthService.API.Controllers
 
             return Ok(res);
         }
-        
-        // private CustomerReadModel GetCustomerById(int id)
-        // {
-        //     string key = $"customer-{id}";
-        //
-        //     var cacheCustomer = _cacheService.GetData<CustomerReadModel>(key);
-        //
-        //     if (cacheCustomer == null)
-        //     {
-        //         cacheCustomer = _customerService.GetCustomerById(id);
-        //
-        //         _cacheService.SetData(key, cacheCustomer);
-        //
-        //         return cacheCustomer;
-        //     }
-        //
-        //     return cacheCustomer;
-        // }
-        //
-        // private TaskerReadModel GetTaskerById(int id)
-        // {
-        //     string key = $"tasker-{id}";
-        //
-        //     var cacheTasker = _cacheService.GetData<TaskerReadModel>(key);
-        //
-        //     if (cacheTasker == null)
-        //     {
-        //         cacheTasker = _taskerService.GetTaskerById(id);
-        //
-        //         _cacheService.SetData(key, cacheTasker);
-        //
-        //         return cacheTasker;
-        //     }
-        //
-        //     return cacheTasker;
-        // }
-    }
 
+        [HttpGet("{id}/taskers")]
+        public ActionResult<TaskerReadModel> GetTaskerByAccountId(int id)
+        {
+            var res = _taskerService.GetTaskerByAccountId(id);
+
+            if (res == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(res);
+        }
+    }
 }

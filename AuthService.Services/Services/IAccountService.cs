@@ -1,4 +1,5 @@
-﻿using AuthService.Repositories.Models;
+﻿using AuthService.Repositories.Enums;
+using AuthService.Repositories.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace AuthService.Services.Services
     {
         IEnumerable<AccountReadModel> GetAllAccounts();
         AccountReadModel GetAccountById(int id);
-        AccountReadModel CreateAccount(AccountCreateModel accountCreateModel);
+        AccountReadModel CreateAccount(AccountCreateModel accountCreateModel, Role role);
         bool PhoneNumberExits(string phoneNumber);
     }
 }

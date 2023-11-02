@@ -2,13 +2,7 @@ using AuthService.Repositories.Entities;
 using AuthService.Repositories.Enums;
 using AuthService.Repositories.Models;
 using AuthService.Repositories.Repositories;
-using AuthService.Services.CacheService;
-using AutoMapper;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AuthService.Services.Services.Impl
 {
@@ -80,6 +74,16 @@ namespace AuthService.Services.Services.Impl
                 Account = accountModel,
                 Token = token
             };
+        }
+
+        public AuthenticateResponseModel RegisterAsCustomer(AuthRequestCustomerModel authRequestCustomerModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AuthenticateResponseModel RegisterAsTasker(AuthRequestTaskerModel authRequestTaskerModel)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -11,5 +11,7 @@ namespace AuthService.Services.Services
 	{
         AuthenticateResponseModel Authenticate(string phoneNumber, string password);
         AuthenticateResponseModel Register(AuthenticateRequestModel registerRequestModel);
+		AuthenticateResponseModel RegisterAsTasker(AuthRequestTaskerModel authRequestTaskerModel);
+		AuthenticateResponseModel RegisterAsCustomer(AuthRequestCustomerModel authRequestCustomerModel);
 	}
 }

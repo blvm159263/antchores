@@ -23,13 +23,13 @@ namespace AuthService.Services.Services.Impl
             _mapper = mapper;
         }
 
-        public AccountReadModel CreateAccount(AccountCreateModel accountCreateModel)
+        public AccountReadModel CreateAccount(AccountCreateModel accountCreateModel, Role role)
         {
             var accModel = _mapper.Map<Account>(accountCreateModel);
             accModel.Status = true;
             accModel.UpdatedAt = System.DateTime.Now;
             accModel.CreatedAt = System.DateTime.Now;
-            accModel.Role = Role.Customer;
+            accModel.Role = role;
             accModel.Balance = 0;
             _accountRepository.CreateAccount(accModel);
 
