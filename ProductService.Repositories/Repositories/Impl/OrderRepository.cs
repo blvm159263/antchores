@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Repositories.Data;
 using ProductService.Repositories.Entities;
+using ProductService.Repositories.Enums;
 
 namespace ProductService.Repositories.Repositories.Impl
 {
@@ -127,5 +128,19 @@ namespace ProductService.Repositories.Repositories.Impl
                 .ThenInclude(od => od.TaskDetail)
                 .ThenInclude(td => td.Category)
                 .FirstOrDefault(o => o.Id == orderId);
+
+        public bool UpdateOrder(Order order)
+        {
+            _context.Orders.Update(order);
+            return _context.SaveChanges() > 0;
+        }
+
+        public IEnumerable<Order> GetOrdersByState(OrderEnum state)
+        => _context.Orders
+                .Include(x => x.Customer)
+                .Include(x => x.OrderDetails)
+                .ThenInclude(od => od.TaskDetail)
+                .ThenInclude(td => td.Category)
+                .Where(o => o.State == state);
     }
 }

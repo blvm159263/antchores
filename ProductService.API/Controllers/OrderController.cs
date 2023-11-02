@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using ProductService.Services.Services;
 using System.Linq;
 using ProductService.Services.CacheService;
+using ProductService.Repositories.Enums;
 
 namespace ProductService.API.Controllers
 {
@@ -64,7 +65,44 @@ namespace ProductService.API.Controllers
             }
 
             return Ok(order);
+        }
 
+        [HttpGet("state/{state}/available")]
+        public ActionResult<IEnumerable<OrderReadModel>> GetOrdersByStateAndAfterDate(int state)
+        {
+            string key = $"order-state{state}";
+            var orders = _cacheService.GetData<IEnumerable<OrderReadModel>>(key);
+            if (orders == null)
+            {
+
+                OrderEnum orderEnum;
+                switch (state)
+                {
+                    case 0:
+                        orderEnum = OrderEnum.Pending;
+                        break;
+                    case 1:
+                        orderEnum = OrderEnum.Accepted;
+                        break;
+                    case 2:
+                        orderEnum = OrderEnum.Completed;
+                        break;
+                    case 3:
+                        orderEnum = OrderEnum.Canceled;
+                        break;
+                    default:
+                        orderEnum = OrderEnum.Pending;
+                        break;
+                }
+                orders = _orderService.GetOrdersByStateAndAfterDate(orderEnum, DateTime.Now);
+                if (orders == null || orders.Count() < 1)
+                {
+                    return NotFound();
+                }
+                _cacheService.SetData(key, orders);
+                return Ok(orders);
+            }
+            return Ok(orders);
         }
     }
 }

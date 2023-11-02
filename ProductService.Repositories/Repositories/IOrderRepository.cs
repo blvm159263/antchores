@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ProductService.Repositories.Entities;
+using ProductService.Repositories.Enums;
 
 namespace ProductService.Repositories.Repositories
 {
@@ -20,6 +21,8 @@ namespace ProductService.Repositories.Repositories
         IEnumerable<Order> GetOrdersAfterDate(DateTime currentDate);
         IEnumerable<Order> GetApproriateOrderByCategoriesOfTasker(int taskerId);
         Order GetOrderByOrderId(int orderId);
+        bool UpdateOrder(Order order);
+        IEnumerable<Order> GetOrdersByState(OrderEnum state);
 
         //Customer
         IEnumerable<Tasker> GetAllTaskers();

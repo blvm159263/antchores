@@ -102,6 +102,8 @@ namespace ProductService.API.Controllers
             bool result = _taskerService.CreateContract(contractCreateModel);
             if(result)
             {
+                string key = $"order-state0";
+                _cacheService.RemoveData(key);
                 return Ok($"Contact create successful for tasker {taskerId} with order {orderId}");
             }
             return BadRequest("Cannot create! Check again!");

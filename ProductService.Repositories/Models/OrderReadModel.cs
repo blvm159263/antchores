@@ -12,6 +12,7 @@ namespace ProductService.Repositories.Models
         public DateTime EndTime { get; set; }
         public string Address { get; set; }
         public string CategoryName { get; set; }
+        public OrderEnum State { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public decimal Total { get; set; }
         public bool Status { get; set; }

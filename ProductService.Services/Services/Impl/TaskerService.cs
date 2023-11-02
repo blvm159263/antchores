@@ -1,5 +1,6 @@
 using AutoMapper;
 using ProductService.Repositories.Entities;
+using ProductService.Repositories.Enums;
 using ProductService.Repositories.Models;
 using ProductService.Repositories.Repositories;
 using ProductService.Repositories.Repositories.Impl;
@@ -15,14 +16,20 @@ namespace ProductService.Services.Services.Impl
         private readonly IMapper _mapper;
         private readonly IContractRepository _contractRepository;
         private readonly ITaskerCertRepository _taskerCertRepository;
+        private readonly IOrderRepository _orderRepository;
         private readonly ICategoryRepository _categoryRepository;
 
-        public TaskerService(ITaskerRepository taskerRepository, IContractRepository contactRepository, IMapper mapper, ITaskerCertRepository taskerCertRepository)
+        public TaskerService(ITaskerRepository taskerRepository,
+                            IContractRepository contactRepository,
+                            IMapper mapper,
+                            ITaskerCertRepository taskerCertRepository,
+                            IOrderRepository orderRepository)
         {
             _taskerRepository = taskerRepository;
             _mapper = mapper;
             _contractRepository = contactRepository;
             _taskerCertRepository = taskerCertRepository;
+            _orderRepository = orderRepository;
         }
 
         public IEnumerable<TaskerCertReadModel> GetTaskerCertsByTaskerId(int taskerId)
@@ -38,8 +45,8 @@ namespace ProductService.Services.Services.Impl
             time = new DateTime(time.Year, time.Month, time.Day, 0, 0, 0);
             var availableOrders = contacts
                 .Where(contact => contact.Order.StartTime > time && contact.Order.StartTime < endDay)
-                .Select(contact => _mapper.Map<OrderReadModel>(contact.Order));
-
+                .Select(contact => _mapper.Map<OrderReadModel>(contact.Order))
+                .OrderBy(o => o.StartTime);
             return availableOrders;
         }
 
@@ -94,14 +101,25 @@ namespace ProductService.Services.Services.Impl
 
         public bool CreateContract(ContractCreateModel contractCreateModel)
         {
-            var contract = _mapper.Map<Contract>(contractCreateModel);
-            return _contractRepository.CreateContact(contract);
+            var contract = new Contract();
+            contract.OrderId = contractCreateModel.OrderId;
+            contract.TaskerId = contractCreateModel.TaskerId;
+            contract.CreateAt = DateTime.Now;
+            contract.Status = true;
+            
+            if (_contractRepository.CreateContact(contract))
+            {
+                var order = _orderRepository.GetOrderByOrderId(contractCreateModel.OrderId);
+                order.State = OrderEnum.Accepted;
+                return _orderRepository.UpdateOrder(order);
+            }
+            return false;
         }
 
         public bool IsContractExist(ContractCreateModel contractCreateModel)
         {
             var contact = _contractRepository.GetContractsByTaskerIdAndOrderId(contractCreateModel.TaskerId, contractCreateModel.OrderId);
-            if(contact == null)
+            if (contact == null)
             {
                 return false;
             }

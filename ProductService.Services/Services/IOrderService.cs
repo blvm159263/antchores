@@ -1,4 +1,5 @@
 ﻿using ProductService.Repositories.Entities;
+using ProductService.Repositories.Enums;
 using ProductService.Repositories.Models;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace ProductService.Services.Services
         IEnumerable<OrderReadModel> GetOrdersAfterDate(DateTime currentDate);
         IEnumerable<OrderReadModel> GetApproriateOrderByCategoriesOfTasker(int taskerId);
         OrderReadModel GetOrderByOrderId(int orderId);
+        IEnumerable<OrderReadModel> GetOrdersByStateAndAfterDate(OrderEnum state,DateTime currentDate);
 
         //Customer
         IEnumerable<Tasker> GetAllTaskers();

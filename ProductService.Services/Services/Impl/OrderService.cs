@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ProductService.Repositories.Entities;
+using ProductService.Repositories.Enums;
 using ProductService.Repositories.Models;
 using ProductService.Repositories.Repositories;
 using ProductService.Repositories.Repositories.Impl;
@@ -51,7 +52,7 @@ namespace ProductService.Services.Services.Impl
 
         public IEnumerable<OrderReadModel> GetOrdersAfterDate(DateTime currentDate)
         {
-            IEnumerable<Order> orders = _orderRepository.GetOrdersAfterDate(currentDate);
+            IEnumerable<Order> orders = _orderRepository.GetOrdersAfterDate(currentDate).OrderBy(o => o.StartTime);
             return _mapper.Map<IEnumerable<OrderReadModel>>(orders);
         }
 
@@ -71,6 +72,13 @@ namespace ProductService.Services.Services.Impl
         {
             var order = _orderRepository.GetOrderByOrderId(orderId);
             return _mapper.Map<OrderReadModel>(order);
+        }
+
+        public IEnumerable<OrderReadModel> GetOrdersByStateAndAfterDate(OrderEnum state,DateTime currentDate){
+            currentDate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 0, 0, 0);
+            var orders = _orderRepository.GetOrdersAfterDate(currentDate);
+            orders = orders.Where(o => o.State.Equals(state)).OrderBy(o => o.StartTime);
+            return _mapper.Map<IEnumerable<OrderReadModel>>(orders);
         }
     }
 }
