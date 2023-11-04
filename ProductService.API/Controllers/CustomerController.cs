@@ -51,38 +51,47 @@ namespace ProductService.API.Controllers
         [HttpGet("{id}/orders/available")]
         public ActionResult GetOrdersByStateAndAfterDate(int state, int id)
         {
-            string key = $"customer-order-state{state}-{id}";
-            var orders = _cacheService.GetData<IEnumerable<OrderReadModel>>(key);
-            if (orders == null)
+            try
             {
-                OrderEnum orderEnum;
-                switch (state)
+                string key = $"customer-order-state{state}-{id}";
+                var orders = _cacheService.GetData<IEnumerable<OrderReadModel>>(key);
+                if (orders == null)
                 {
-                    case 0:
-                        orderEnum = OrderEnum.Pending;
-                        break;
-                    case 1:
-                        orderEnum = OrderEnum.Accepted;
-                        break;
-                    case 2:
-                        orderEnum = OrderEnum.Completed;
-                        break;
-                    case 3:
-                        orderEnum = OrderEnum.Canceled;
-                        break;
-                    default:
-                        orderEnum = OrderEnum.Pending;
-                        break;
+                    OrderEnum orderEnum;
+                    switch (state)
+                    {
+                        case 0:
+                            orderEnum = OrderEnum.Pending;
+                            break;
+                        case 1:
+                            orderEnum = OrderEnum.Accepted;
+                            break;
+                        case 2:
+                            orderEnum = OrderEnum.Completed;
+                            break;
+                        case 3:
+                            orderEnum = OrderEnum.Canceled;
+                            break;
+                        default:
+                            orderEnum = OrderEnum.Pending;
+                            break;
+                    }
+                    orders = _orderService.GetOrdersByStateAndAfterDateByCustomerId(orderEnum, DateTime.Now, id);
+                    if (orders == null || orders.Count() < 1)
+                    {
+                        var list = new List<OrderReadModel>();
+                        return Ok(list);
+                    }
+                    _cacheService.SetData(key, orders);
+                    return Ok(orders);
                 }
-                orders = _orderService.GetOrdersByStateAndAfterDateByCustomerId(orderEnum, DateTime.Now, id);
-                if (orders == null || orders.Count() < 1)
-                {
-                    return NotFound();
-                }
-                _cacheService.SetData(key, orders);
                 return Ok(orders);
             }
-            return Ok(orders);
+            catch(Exception ex)
+            {
+                var list = new List<OrderReadModel>();
+                return Ok(list);
+            }
         }
     }
 }

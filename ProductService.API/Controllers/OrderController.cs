@@ -111,6 +111,7 @@ namespace ProductService.API.Controllers
             try
             {
                 _orderService.CreateOrder(cartModel);
+                RemoveCache(cartModel.CustomerId);
                 return Ok(new
                 {
                     message = "Create order successfully!"
@@ -124,6 +125,29 @@ namespace ProductService.API.Controllers
                 });
             }
 
+        }
+
+        private void RemoveCache(int customerId)
+        {
+            string actionOrder_0 = $"customer-order-state{0}-{customerId}";
+            string actionOrder_1 = $"customer-order-state{1}-{customerId}";
+            string actionOrder_2 = $"customer-order-state{2}-{customerId}";
+            string actionOrder_3 = $"customer-order-state{3}-{customerId}";
+
+            string actionOrderDetail_0 = $"order-state{0}";
+            string actionOrderDetail_1 = $"order-state{1}";
+            string actionOrderDetail_2 = $"order-state{2}";
+            string actionOrderDetail_3 = $"order-state{3}";
+
+            _cacheService.RemoveData(actionOrder_0);
+            _cacheService.RemoveData(actionOrder_1);
+            _cacheService.RemoveData(actionOrder_2);
+            _cacheService.RemoveData(actionOrder_3);
+            
+            _cacheService.RemoveData(actionOrderDetail_0);
+            _cacheService.RemoveData(actionOrderDetail_1);
+            _cacheService.RemoveData(actionOrderDetail_2);
+            _cacheService.RemoveData(actionOrderDetail_3);
         }
     }
 }

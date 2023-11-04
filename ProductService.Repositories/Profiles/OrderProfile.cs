@@ -3,6 +3,7 @@ using ProductService.Repositories.Models;
 using AutoMapper;
 using AuthService;
 using System.Linq;
+using System.Diagnostics;
 
 namespace ProductService.Repositories.Profiles
 {

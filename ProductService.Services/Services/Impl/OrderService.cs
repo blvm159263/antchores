@@ -97,6 +97,7 @@ namespace ProductService.Services.Services.Impl
 
         public void CreateOrder(CartModel cartModel)
         {
+            var customer = _customerRepository.GetCustomerById(cartModel.CustomerId);
             Order order = new Order
             {
                 CreatedAt = DateTime.Now,
@@ -105,10 +106,10 @@ namespace ProductService.Services.Services.Impl
                 PaymentStatus = PaymentStatus.Pending,
                 Total = 0,
                 State = OrderEnum.Pending,
-                CustomerId = cartModel.CustomerId,
+                CustomerId = customer.Id,
             };
 
-            _orderRepository.CreateOrder(cartModel.CustomerId, order);
+            _orderRepository.CreateOrder(customer.Id, order);
 
             decimal total = 0;
 
