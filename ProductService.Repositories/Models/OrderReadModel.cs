@@ -17,5 +17,6 @@ namespace ProductService.Repositories.Models
         public decimal Total { get; set; }
         public bool Status { get; set; }
         public int CustomerId { get; set; }
+
     }
 }

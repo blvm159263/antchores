@@ -127,6 +127,45 @@ namespace ProductService.API.Controllers
 
         }
 
+        [HttpPut("{orderId}/state/{state}")]
+        public ActionResult<bool> UpdateOrderState(int orderId, int state)
+        {
+            OrderEnum orderEnum;
+            switch (state)
+            {
+                case 0:
+                    orderEnum = OrderEnum.Pending;
+                    break;
+                case 1:
+                    orderEnum = OrderEnum.Accepted;
+                    break;
+                case 2:
+                    orderEnum = OrderEnum.Completed;
+                    break;
+                case 3:
+                    orderEnum = OrderEnum.Canceled;
+                    break;
+                default:
+                    orderEnum = OrderEnum.Pending;
+                    break;
+            }
+            bool res = _orderService.UpdateOrderState(orderId, orderEnum);
+            if (res)
+            {
+                return Ok(new
+                {
+                    message = "Update order state successfully!"
+                });
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    message = "Update order state failed!"
+                });
+            }
+        }
+
         private void RemoveCache(int customerId)
         {
             string actionOrder_0 = $"customer-order-state{0}-{customerId}";
@@ -143,7 +182,7 @@ namespace ProductService.API.Controllers
             _cacheService.RemoveData(actionOrder_1);
             _cacheService.RemoveData(actionOrder_2);
             _cacheService.RemoveData(actionOrder_3);
-            
+
             _cacheService.RemoveData(actionOrderDetail_0);
             _cacheService.RemoveData(actionOrderDetail_1);
             _cacheService.RemoveData(actionOrderDetail_2);

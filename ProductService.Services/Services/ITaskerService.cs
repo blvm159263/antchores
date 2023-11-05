@@ -21,5 +21,7 @@ namespace ProductService.Services.Services
         bool CreateContract(ContractCreateModel contractCreateModel);
 
         bool IsContractExist(ContractCreateModel contractCreateModel);
+
+        bool DeleteContract(int taskerId, int orderId);
     }
 }

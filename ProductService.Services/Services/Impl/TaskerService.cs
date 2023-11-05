@@ -125,5 +125,20 @@ namespace ProductService.Services.Services.Impl
             }
             return true;
         }
+
+        public bool DeleteContract(int taskerId, int orderId)
+        {
+            var order = _orderRepository.GetOrderByOrderId(orderId);
+            if(order != null){
+                order.State = OrderEnum.Pending;
+                _orderRepository.UpdateOrder(order);
+            }
+            var contract = _contractRepository.GetContractsByTaskerIdAndOrderId(taskerId, orderId);
+            if (contract == null)
+            {
+                return false;
+            }
+            return _contractRepository.DeleteContract(contract);
+        }
     }
 }

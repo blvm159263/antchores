@@ -50,5 +50,15 @@ namespace ProductService.Repositories.Repositories.Impl
                     .Include(o => o.Order.Customer)
                     .FirstOrDefault(x => x.TaskerId == taskerId && x.OrderId == orderId);
         }
+
+        public bool DeleteContract(Contract con)
+        {
+            if (con == null)
+            {
+                throw new ArgumentNullException(nameof(con));
+            }
+            _context.Contracts.Remove(con);
+            return _context.SaveChanges() > 0;
+        }
     }
 }

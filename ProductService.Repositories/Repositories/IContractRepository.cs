@@ -10,5 +10,8 @@ namespace ProductService.Repositories.Repositories
         bool CreateContact(Contract con);
 
         Contract GetContractsByTaskerIdAndOrderId(int taskerId, int orderId);
+
+        bool DeleteContract(Contract con);
+        
     }
 }

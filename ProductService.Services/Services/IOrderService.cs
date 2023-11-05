@@ -26,6 +26,8 @@ namespace ProductService.Services.Services
         IEnumerable<OrderReadModel> GetOrdersByStateAndAfterDateByCustomerId(OrderEnum state,DateTime currentDate, int customerId);
         void CreateOrder(CartModel cartModel);
 
+        bool UpdateOrderState(int orderId, OrderEnum state);
+
         //Customer
         IEnumerable<Tasker> GetAllTaskers();
         void CreateTasker(Tasker cus);

@@ -29,10 +29,10 @@ namespace ProductService.API.Controllers
 
             TaskerModel taskerModel = _cacheService.GetData<TaskerModel>(key);
 
-            if(taskerModel == null)
+            if (taskerModel == null)
             {
                 taskerModel = _taskerService.GetTaskerById(id);
-                if(taskerModel != null)
+                if (taskerModel != null)
                 {
                     _cacheService.SetData(key, taskerModel);
                     return Ok(taskerModel);
@@ -46,15 +46,16 @@ namespace ProductService.API.Controllers
         }
 
         [HttpGet("{id}/certs")]
-        public ActionResult<IEnumerable<TaskerCertReadModel>> GetTaskerCertsByTaskerId(int id) {
+        public ActionResult<IEnumerable<TaskerCertReadModel>> GetTaskerCertsByTaskerId(int id)
+        {
             string key = $"tasker-{id}-cert";
 
             IEnumerable<TaskerCertReadModel> taskerCertReadModels = _cacheService.GetData<IEnumerable<TaskerCertReadModel>>(key);
 
-            if(taskerCertReadModels == null)
+            if (taskerCertReadModels == null)
             {
                 taskerCertReadModels = _taskerService.GetTaskerCertsByTaskerId(id);
-                if(taskerCertReadModels != null)
+                if (taskerCertReadModels != null)
                 {
                     _cacheService.SetData(key, taskerCertReadModels);
                     return Ok(taskerCertReadModels);
@@ -68,8 +69,9 @@ namespace ProductService.API.Controllers
         }
 
         [HttpGet("{id}/orders/day")]
-        public ActionResult<IEnumerable<OrderReadModel>> GetOrderAvailableForTasker(int id, DateTime time) {
-            if(time == null) time = DateTime.Now;
+        public ActionResult<IEnumerable<OrderReadModel>> GetOrderAvailableForTasker(int id, DateTime time)
+        {
+            if (time == null) time = DateTime.Now;
             IEnumerable<OrderReadModel> orders = _taskerService.GetOrdersAvailableOfTasker(id, time);
             if (orders.Count() < 1) return NotFound();
 
@@ -91,22 +93,35 @@ namespace ProductService.API.Controllers
         }
 
         [HttpPost("{taskerId}/order/{orderId}")]
-        public ActionResult<string> CreateContract(int orderId, int taskerId) { 
+        public ActionResult<string> CreateContract(int orderId, int taskerId)
+        {
             ContractCreateModel contractCreateModel = new ContractCreateModel();
             contractCreateModel.OrderId = orderId;
             contractCreateModel.TaskerId = taskerId;
             bool isExist = _taskerService.IsContractExist(contractCreateModel);
-            if(isExist){
+            if (isExist)
+            {
                 return NotFound("Contract is exist!");
             }
             bool result = _taskerService.CreateContract(contractCreateModel);
-            if(result)
+            if (result)
             {
                 string key = $"order-state0";
                 _cacheService.RemoveData(key);
                 return Ok($"Contact create successful for tasker {taskerId} with order {orderId}");
             }
             return BadRequest("Cannot create! Check again!");
+        }
+
+        [HttpDelete("{taskerId}/order/{orderId}")]
+        public ActionResult<bool> DeleteContract(int taskerId, int orderId)
+        {
+            bool result = _taskerService.DeleteContract(taskerId, orderId);
+            if (result)
+            {
+                return Ok($"Contact delete successful for tasker {taskerId} with order {orderId}");
+            }
+            return BadRequest("Cannot delete! Check again!");
         }
     }
 }

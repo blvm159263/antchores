@@ -144,5 +144,12 @@ namespace ProductService.Services.Services.Impl
                 throw new Exception("Create order failed");
             }
         }
+
+        public bool UpdateOrderState(int orderId, OrderEnum state)
+        {
+            var order = _orderRepository.GetOrderByOrderId(orderId);
+            order.State = state;
+            return _orderRepository.UpdateOrder(order);
+        }
     }
 }

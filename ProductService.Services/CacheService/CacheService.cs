@@ -44,7 +44,7 @@ namespace ProductService.Services.CacheService
         {
             var options = new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1),
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
             };
 
             _distributedCache.SetString(key, JsonSerializer.Serialize(value), options);
