@@ -98,6 +98,7 @@ namespace ProductService.Services.Services.Impl
         public void CreateOrder(CartModel cartModel)
         {
             var customer = _customerRepository.GetCustomerById(cartModel.CustomerId);
+
             Order order = new Order
             {
                 CreatedAt = DateTime.Now,
@@ -119,16 +120,17 @@ namespace ProductService.Services.Services.Impl
                 {
                     OrderId = order.Id,
                     TaskDetailId = item.TaskDetailId,
-                    Quantity = item.Quantity,
                     Status = true
                 };
 
                 if(item.Unit == QuantityUnit.M2)
                 {
+                    orderDetail.Quantity = 1;
                     total += item.Price;
                 }
                 else
                 {
+                    orderDetail.Quantity = item.Quantity;
                     total += item.Quantity * item.Price;
                 }
 
