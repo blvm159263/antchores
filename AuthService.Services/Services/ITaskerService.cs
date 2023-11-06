@@ -12,6 +12,8 @@ namespace AuthService.Services.Services
         IEnumerable<TaskerReadModel> GetAllTaskers();
         TaskerReadModel GetTaskerById(int id);
         TaskerReadModel CreateTasker(int accountId, TaskerCreateModel taskerCreateModel);
+
+        bool UpdateTasker(int taskerId, AuthRequestTaskerModel model);
         bool AccountExists(int accountId);
 
         TaskerReadModel GetTaskerByAccountId(int accountId);

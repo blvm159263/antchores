@@ -14,11 +14,15 @@ namespace AuthService.Services.Services.Impl
     {
         private readonly TaskerRepository _taskerRepository;
         private readonly IMapper _mapper;
+        private readonly AccountRepository _accountRepository;
 
-        public TaskerService(TaskerRepository taskerRepository, IMapper mapper)
+        public TaskerService(TaskerRepository taskerRepository,
+                            AccountRepository accountRepository,
+                            IMapper mapper)
         {
             _taskerRepository = taskerRepository;
             _mapper = mapper;
+            _accountRepository = accountRepository;
         }
 
         public bool AccountExists(int accountId)
@@ -30,7 +34,7 @@ namespace AuthService.Services.Services.Impl
         public TaskerReadModel CreateTasker(int accountId, TaskerCreateModel taskerCreateModel)
         {
             var cusModel = _mapper.Map<Tasker>(taskerCreateModel);
-            
+
             cusModel.AccountId = accountId;
 
             _taskerRepository.CreateTasker(cusModel);
@@ -65,6 +69,27 @@ namespace AuthService.Services.Services.Impl
             var taskerReadModel = _mapper.Map<TaskerReadModel>(tasker);
 
             return taskerReadModel;
+        }
+
+        public bool UpdateTasker(int taskerId, AuthRequestTaskerModel model)
+        {
+            var tasker = _taskerRepository.GetTaskerById(taskerId);
+
+            var account = _accountRepository.GetAccountById(tasker.AccountId);
+
+            account.PhoneNumber = model.PhoneNumber;
+            account.Password = model.Password;
+            if (_accountRepository.UpdateAccount(account))
+            {
+                tasker.Identification = model.Identification;
+                tasker.Address = model.Address;
+                tasker.Name = model.Name;
+                tasker.Email = model.Email;
+                if(_taskerRepository.UpdateTasker(tasker))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

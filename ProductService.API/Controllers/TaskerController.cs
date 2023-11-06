@@ -68,12 +68,24 @@ namespace ProductService.API.Controllers
             return Ok(taskerCertReadModels);
         }
 
-        [HttpGet("{id}/orders/day")]
-        public ActionResult<IEnumerable<OrderReadModel>> GetOrderAvailableForTasker(int id, DateTime time)
+        [HttpGet("{id}/orders")]
+        public ActionResult<IEnumerable<OrderReadModel>> GetOrderAvailableForTasker(int id, DateTime time, string state)
         {
             if (time == null) time = DateTime.Now;
-            IEnumerable<OrderReadModel> orders = _taskerService.GetOrdersAvailableOfTasker(id, time);
-            if (orders.Count() < 1) return NotFound();
+            IEnumerable<OrderReadModel> orders;
+            switch (state)
+            {
+                case "available":
+                    orders = _taskerService.GetOrdersAvailableOfTasker(id, time);
+                    break;
+                case "inprogress":
+                    orders = _taskerService.GetOrdersInProgressForTasker(id, time);
+                    break;
+                default:
+                    return NotFound();
+            }
+
+            if (orders == null || orders.Count() < 1) return NotFound();
 
             return Ok(orders);
         }
@@ -123,5 +135,6 @@ namespace ProductService.API.Controllers
             }
             return BadRequest("Cannot delete! Check again!");
         }
+
     }
 }

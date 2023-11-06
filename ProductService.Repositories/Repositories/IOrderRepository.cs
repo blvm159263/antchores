@@ -9,7 +9,10 @@ namespace ProductService.Repositories.Repositories
     {
         //Customer
         IEnumerable<Customer> GetAllCustomers();
+        Customer GetCustomerByExternalId(int cusId);
         void CreateCustomer(Customer cus);
+
+        void UpdateCustomer(Customer cus);
         bool CustomerExists(int cusId);
 
         bool ExternalCustomerExists(int externalcusId); 
@@ -24,9 +27,13 @@ namespace ProductService.Repositories.Repositories
         bool UpdateOrder(Order order);
         IEnumerable<Order> GetOrdersByState(OrderEnum state);
 
-        //Customer
+        //Tasker
         IEnumerable<Tasker> GetAllTaskers();
+
+        Tasker GetTaskerByExternalId(int taskerId);
         void CreateTasker(Tasker cus);
+
+        void UpdateTasker(Tasker cus);
         bool TaskerExists(int cusId);
 
         bool ExternalTaskerExists(int externalcusId);

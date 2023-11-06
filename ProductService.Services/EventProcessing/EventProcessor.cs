@@ -32,6 +32,12 @@ namespace ProductService.Services.EventProcessing
                 case EventType.TaskerPublished:
                     addTasker(message);
                     break;
+                case EventType.CustomerUpdatePublished:
+                    updateCustomer(message);
+                    break;
+                case EventType.TaskerUpdatePublished:
+                    udpateTasker(message);
+                    break;
                 default:
                     break;
             }
@@ -51,6 +57,12 @@ namespace ProductService.Services.EventProcessing
                 case "Tasker_Published":
                     Console.WriteLine("--> Tasker Published Event Detected");
                     return EventType.TaskerPublished;
+                case "Customer_Update_Published":
+                    Console.WriteLine("--> Customer Update Published Event Detected");
+                    return EventType.CustomerUpdatePublished;
+                case "Tasker_Update_Published":
+                    Console.WriteLine("--> Tasker Update Published Event Detected");
+                    return EventType.TaskerUpdatePublished;
                 default:
                     Console.WriteLine("--> Could not determine the event type");
                     return EventType.Undetermind;
@@ -76,6 +88,38 @@ namespace ProductService.Services.EventProcessing
                     else
                     {
                         Console.WriteLine($"--> Customer already exists: {customerEntity.Name}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"--> Could not add Customer to database: {ex.Message}");
+                }
+            }
+        }
+
+        private void updateCustomer(string customerMessage)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var repo = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
+                var customer = JsonSerializer.Deserialize<CustomerPublishedModel>(customerMessage);
+                Console.WriteLine("Customer:" + customer.Id);
+                try
+                {
+                    var customerEntity = repo.GetCustomerByExternalId(customer.Id);
+
+                    if (customerEntity != null)
+                    {
+                        customerEntity.Name = customer.Name;
+                        customerEntity.Address = customer.Address;
+                        customerEntity.Email = customer.Email;
+                        customerEntity.Status = customer.Status;
+                        repo.UpdateCustomer(customerEntity);
+                        Console.WriteLine($"--> Customer Update: {customerEntity.Name}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"--> Customer doesn't exists: {customerEntity.Name}");
                     }
                 }
                 catch (Exception ex)
@@ -111,12 +155,46 @@ namespace ProductService.Services.EventProcessing
                 }
             }
         }
+
+        private void udpateTasker(string taskerMessage)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var repo = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
+                var tasker = JsonSerializer.Deserialize<TaskerPublishedModel>(taskerMessage);
+                try
+                {
+                    var taskerEntity = repo.GetTaskerByExternalId(tasker.Id);
+
+                    if (taskerEntity != null)
+                    {
+                        taskerEntity.Name = tasker.Name;
+                        taskerEntity.Address = tasker.Address;
+                        taskerEntity.Email = tasker.Email;
+                        taskerEntity.Status = tasker.Status;
+                        taskerEntity.Identification = tasker.Identification;
+                        repo.UpdateTasker(taskerEntity);
+                        Console.WriteLine($"--> tasker Update: {taskerEntity.Name}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"--> tasker doesn't exists: {taskerEntity.Name}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"--> Could not add Customer to database: {ex.Message}");
+                }
+            }
+        }
     }
 
     enum EventType
     {
         CustomerPublished,
+        CustomerUpdatePublished,
         TaskerPublished,
+        TaskerUpdatePublished,
         Undetermind
     }
 }

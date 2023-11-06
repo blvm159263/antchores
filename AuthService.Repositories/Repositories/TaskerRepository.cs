@@ -32,6 +32,15 @@ namespace AuthService.Repositories.Repositories
             _context.SaveChanges();
         }
 
+        public bool UpdateTasker(Tasker tasker){
+            if (tasker == null)
+                throw new ArgumentNullException(nameof(tasker));
+
+            _context.ChangeTracker.Clear();
+            _context.Entry(tasker).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            return _context.SaveChanges() > 0;
+        }
+
         public IEnumerable<Tasker> GetAll()
         {
             return _context.Taskers

@@ -95,5 +95,36 @@ namespace AuthService.API.Controllers
 
             return Ok(cacheTasker);
         }
+
+        [HttpPut("{id}")]
+        public ActionResult<bool> UpdateTasker(int id, AuthRequestTaskerModel model)
+        {
+            bool result = _taskerService.UpdateTasker(id, model);
+
+            if (result)
+            {
+                try
+                {
+                    TaskerPublishedModel taskerPublishedModel = new TaskerPublishedModel
+                    {
+                        Event = "Tasker_Update_Published",
+                        Id = id,
+                        Name = model.Name,
+                        Address = model.Address,
+                        Email = model.Email,
+                        Identification = model.Identification,
+                        Status = true
+                    };
+                    _messageBusClient.PublishNewTasker(taskerPublishedModel);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Could not send asynchronously!: " + ex.Message);
+                }
+                return Ok(result);
+            }
+
+            return BadRequest("Cannot update tasker");
+        }
     }
 }

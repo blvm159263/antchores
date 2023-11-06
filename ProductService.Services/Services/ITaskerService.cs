@@ -13,6 +13,7 @@ namespace ProductService.Services.Services
         IEnumerable<TaskerCertReadModel> GetTaskerCertsByTaskerId(int taskerId);
 
         IEnumerable<OrderReadModel> GetOrdersAvailableOfTasker(int taskerId, DateTime time);
+        IEnumerable<OrderReadModel> GetOrdersInProgressForTasker(int taskerId, DateTime time);
 
         TaskerModel AddCategoryServiceForTasker(int taskerId, List<int> categoryIds);
 

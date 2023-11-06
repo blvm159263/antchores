@@ -41,14 +41,14 @@ namespace AuthService.Repositories.Repositories
         }
 
 
-        public void UpdateAccount(Account Account)
+        public bool UpdateAccount(Account Account)
         {
             if (Account == null)
                 throw new ArgumentNullException(nameof(Account));
 
             _context.ChangeTracker.Clear();
             _context.Entry(Account).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            return _context.SaveChanges() > 0;
         }
 
         public void DeleteAccount(Account Account)

@@ -14,5 +14,6 @@ namespace AuthService.Services.Services
         CustomerReadModel CreateCustomer(int accountId, CustomerCreateModel customerCreateModel);
         bool AccountExists(int accountId);
         CustomerReadModel GetCustomerByAccountId(int accountId);
+        bool UpdateCustomer(int customerId, AuthRequestCustomerModel model);
     }
 }

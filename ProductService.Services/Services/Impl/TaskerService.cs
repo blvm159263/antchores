@@ -50,6 +50,19 @@ namespace ProductService.Services.Services.Impl
             return availableOrders;
         }
 
+        public IEnumerable<OrderReadModel> GetOrdersInProgressForTasker(int taskerId, DateTime nowTime)
+        {
+            IEnumerable<Contract> contacts = _contractRepository.GetContractsByTaskerId(taskerId);
+            var availableOrders = contacts
+                .Where(contact => contact.Order.StartTime < nowTime)
+                .Select(contact => _mapper.Map<OrderReadModel>(contact.Order))
+                .OrderBy(o => o.StartTime);
+
+            var inProgress = availableOrders.Where(o => o.EndTime > nowTime);
+            return inProgress;
+        }
+        
+
         public TaskerModel AddCategoryServiceForTasker(int taskerId, List<int> categoryIds)
         {
             TaskerModel taskerModel = new TaskerModel();

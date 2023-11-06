@@ -51,10 +51,10 @@ namespace AuthService.API.Controllers
                 cacheCustomers = _customerService.GetAllCustomers();
 
                 _cacheService.SetData(key, cacheCustomers);
-                
+
                 return Ok(cacheCustomers);
             }
-            
+
             return Ok(cacheCustomers);
         }
 
@@ -66,7 +66,7 @@ namespace AuthService.API.Controllers
 
             var cacheCustomer = _cacheService.GetData<CustomerReadModel>(key);
 
-            if(cacheCustomer == null)
+            if (cacheCustomer == null)
             {
                 cacheCustomer = _customerService.GetCustomerById(id);
 
@@ -76,6 +76,39 @@ namespace AuthService.API.Controllers
             }
 
             return Ok(cacheCustomer);
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<bool> UpdateCustomer(int id, AuthRequestCustomerModel model)
+        {
+            string key = $"customer-{id}";
+            _cacheService.RemoveData(key);
+
+            bool result = _customerService.UpdateCustomer(id, model);
+
+            if (result)
+            {
+                try
+                {
+                    CustomerPublishedModel CustomerPublishedModel = new CustomerPublishedModel
+                    {
+                        Event = "Customer_Update_Published",
+                        Id = id,
+                        Name = model.Name,
+                        Address = model.Address,
+                        Email = model.Email,
+                        Status = true
+                    };
+                    _messageBusClient.PublishNewCustomer(CustomerPublishedModel);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Could not send asynchronously!: " + ex.Message);
+                }
+                return Ok(result);
+            }
+
+            return BadRequest("Cannot update customer");
         }
     }
 }

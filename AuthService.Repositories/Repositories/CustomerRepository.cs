@@ -32,6 +32,15 @@ namespace AuthService.Repositories.Repositories
             _context.SaveChanges();
         }
 
+        public bool UpdateCustomer(Customer customer){
+            if (customer == null)
+                throw new ArgumentNullException(nameof(customer));
+
+            _context.ChangeTracker.Clear();
+            _context.Entry(customer).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            return _context.SaveChanges() > 0;
+        }
+
         public IEnumerable<Customer> GetAll()
         {
             return _context.Customers.ToList();

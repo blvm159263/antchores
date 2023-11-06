@@ -143,5 +143,35 @@ namespace ProductService.Repositories.Repositories.Impl
                 .ThenInclude(od => od.TaskDetail)
                 .ThenInclude(td => td.Category)
                 .Where(o => o.State == state);
+
+        public void UpdateCustomer(Customer cus)
+        {
+            if(cus == null)
+                throw new ArgumentNullException(nameof(cus));
+            
+            _context.ChangeTracker.Clear();
+            _context.Entry(cus).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void UpdateTasker(Tasker cus)
+        {
+            if(cus == null)
+                throw new ArgumentNullException(nameof(cus));
+            
+            _context.ChangeTracker.Clear();
+            _context.Entry(cus).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public Customer GetCustomerByExternalId(int cusId)
+        {
+            return _context.Customers.SingleOrDefault(c => c.ExternalId == cusId);
+        }
+
+        public Tasker GetTaskerByExternalId(int taskerId)
+        {
+            return _context.Taskers.SingleOrDefault(c => c.ExternalId == taskerId);
+        }
     }
 }

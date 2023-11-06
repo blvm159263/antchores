@@ -10,11 +10,15 @@ namespace AuthService.Services.Services.Impl
     {
         private readonly CustomerRepository _customerRepository;
         private readonly IMapper _mapper;
+        private readonly AccountRepository _accountRepository;
 
-        public CustomerService(CustomerRepository customerRepository, IMapper mapper)
+        public CustomerService(CustomerRepository customerRepository,
+                               AccountRepository accountRepository,
+                               IMapper mapper)
         {
             _customerRepository = customerRepository;
             _mapper = mapper;
+            _accountRepository = accountRepository;
         }
 
         public bool AccountExists(int accountId)
@@ -38,7 +42,7 @@ namespace AuthService.Services.Services.Impl
             var cusModel = _mapper.Map<Customer>(customerCreateModel);
 
             cusModel.AccountId = accountId;
-            
+
             _customerRepository.CreateCustomer(cusModel);
 
             var customerReadModel = _mapper.Map<CustomerReadModel>(cusModel);
@@ -62,6 +66,26 @@ namespace AuthService.Services.Services.Impl
             var customerModel = _mapper.Map<CustomerReadModel>(customer);
 
             return customerModel;
+        }
+
+        public bool UpdateCustomer(int customerId, AuthRequestCustomerModel model)
+        {
+            var customer = _customerRepository.GetCustomerById(customerId);
+
+            var account = _accountRepository.GetAccountById(customer.AccountId);
+
+            account.PhoneNumber = model.PhoneNumber;
+            account.Password = model.Password;
+            if (_accountRepository.UpdateAccount(account))
+            {
+                customer.Address = model.Address;
+                customer.Name = model.Name;
+                customer.Email = model.Email;
+                if (_customerRepository.UpdateCustomer(customer))
+                    return true;
+            }
+
+            return false;
         }
     }
 }
