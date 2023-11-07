@@ -108,6 +108,7 @@ namespace ProductService.Services.Services.Impl
                 Total = 0,
                 State = OrderEnum.Pending,
                 CustomerId = customer.Id,
+                Status = true
             };
 
             _orderRepository.CreateOrder(customer.Id, order);

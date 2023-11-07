@@ -54,7 +54,7 @@ namespace ProductService.Services.Services.Impl
         {
             IEnumerable<Contract> contacts = _contractRepository.GetContractsByTaskerId(taskerId);
             var availableOrders = contacts
-                .Where(contact => contact.Order.StartTime < nowTime)
+                .Where(contact => contact.Order.StartTime < nowTime && contact.Order.State == OrderEnum.Accepted)
                 .Select(contact => _mapper.Map<OrderReadModel>(contact.Order))
                 .OrderBy(o => o.StartTime);
 
